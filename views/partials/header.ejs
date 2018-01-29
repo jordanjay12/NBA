@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <Title>NBA</Title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/stylesheets/main.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+            crossorigin="anonymous">
+        </script>
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>    
+    <body>
+    <div class="container">
+    <nav class = "navbar navbar-inverse bg-primary" >
+        <div class = "container-fluid">
+            <div class = "navbar-header">
+                <a class = "navbar-brand" href="/">NBA</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/schedule/yesterday" id="prevDayButton">Yesterday's Games</a>
+                </li>
+                <li>
+                    <form class="navbar-form navbar-left" action="/schedule" method="GET">
+                        <div class="form-group">
+                            <input type = "date" class="form-control" name = "date" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Submit</button>
+                    </form>                
+                </li>
+                <li>
+                    <a href="/schedule/tomorrow" id="nextDayButton">Tomorrow's Games</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/standings">Standings</a></li>
+                <li><a href="/teams">Teams</a></li>
+                <li><a href="/leagueLeaders">League Leaders</a></li>
+                <li><a href="/players">Players</a></li>
+            </ul>
+        </div>
+    </nav>
+    </div>

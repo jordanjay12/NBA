@@ -1,0 +1,82 @@
+<% include ./partials/header %>
+
+<% var players = data.rosterplayers.playerentry %>
+<% var teamImage = (players[0].team.City + players[0].team.Name).replace(/ /g,'') %>
+
+<div class="container">
+    <img src="../images/<%= teamImage %>.png" style="heigh: 200px; width: 200px; display: block; margin: 0 auto"> </img>
+    <h1><%=players[0].team.City%> <%= players[0].team.Name%></h1>
+    <h2 id="recordTitle" style="text-align: center"><span id="winSpan">Wins: </span> | <span id="lossSpan">Losses: </span></h2>
+
+    <div class="row">
+        <div class="col-md-4" id="firstColumn">
+            <h3 style="margin-top: 0px;">Team Stats</h3>
+            <li class="list-group-item" id="GamesPlayed"><strong># of Games Played:</strong></li>
+            <li class="list-group-item" id="PPG"><strong>Points per Game:</strong></li>
+            <li class="list-group-item" id="APG"><strong>Assists per Game:</strong></li>
+            <li class="list-group-item" id="RPG"><strong>Rebounds per Game:</strong></li>
+            <li class="list-group-item" id="SPG"><strong>Steals per Game:</strong></li>
+            <li class="list-group-item" id="BPG"><strong>Blocks per Game:</strong></li>
+            <li class="list-group-item" id="ToPG"><strong>Turnovers per Game:</strong></li>                
+        </div>
+        <div class="col-md-4" id="middleColumn">
+
+        </div>
+        <div class="col-md-4" id="advancedTeamStats">
+            
+        </div>
+    </div>
+
+    <h3>Team Roster</h3>
+    <table id="playerTable">
+        <tr>
+            <th>Name</th>
+            <th>Number</th>
+            <th>Position</th>
+            <th>Height</th>
+            <th>Weight</th>
+            <th>Age</th>
+            <th>Birth City & Country</th>
+        </tr>
+        <% for(var i = 0; i < players.length; i++){ %>
+            <% var currentPlayer = players[i].player %>
+            <tr>
+                <%
+                var firstName = currentPlayer.FirstName;
+                var lastName = currentPlayer.LastName;
+                while(firstName.includes(".") || firstName.includes("-") || firstName.includes(" ")){
+                    firstName = firstName.replace(".", "");
+                    firstName = firstName.replace("-", "");
+                    firstName = firstName.replace(" ", "");
+                }
+                while(lastName.includes(".") || lastName.includes("-") || lastName.includes(" ")){
+                    lastName = lastName.replace(".", "");
+                    lastName = lastName.replace("-", "");
+                    lastName = lastName.replace(" ", "");
+                }
+                %>                
+                <td><a href="/playerStats/<%=firstName%>-<%=lastName%>"><%=currentPlayer.FirstName%> <%=currentPlayer.LastName%></a></td>
+                <td><%=currentPlayer.JerseyNumber%></td>
+                <td><%=currentPlayer.Position%></td>
+                <td><%=currentPlayer.Height%></td>
+                <td><%=currentPlayer.Weight%></td>
+                <td><%=currentPlayer.Age%></td>
+                <td><%=currentPlayer.BirthCity%> <%=currentPlayer.BirthCountry%></td>            
+            </tr>
+        <% } %>
+    </table>
+    <br>
+    <br>
+    <br>
+    <div id="teamDiv">
+        
+    </div>
+
+</div>
+
+<script src="../scripts/teamStats.js"></script>
+<script src="../scripts/test.js"></script>
+<script>
+    getTeamStats("<%=players[0].team.City%>-<%=players[0].team.Name%>");
+</script>
+<% include ./partials/footer %>

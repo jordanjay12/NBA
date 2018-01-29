@@ -1,0 +1,45 @@
+<% include ./partials/header %>
+<div class="container">
+    <h1>Teams</h1>
+    <% var conferences = data.conferenceteamstandings.conference%>
+    
+    <div class="row" style="text-align: center;">
+        <div class="col-md-6">
+            <%for(var i = 0; i < conferences.length; i++){%>
+                <% if(i == 0){ %>
+                    <h2 style="text-align: center;"><%=conferences[i]["@name"]%> Conference</h2>
+                    <ul class="list-group" style="list-style: none; padding-left: 0px">
+                <% } %>
+                <%if(i == 1){%>
+                    </ul>
+                    </div>
+                    <div class="col-md-6">
+                    <h2 style="text-align: center;"><%=conferences[i]["@name"]%> Conference</h2>
+                    <ul class="list-group" style="list-style: none; padding-left: 0px">
+                <% } %>
+                <%for(var j = 0; j < conferences[0].teamentry.length; j++){%>
+                    <% var teamCity = conferences[i].teamentry[j].team.City%>
+                    <% var teamName = conferences[i].teamentry[j].team.Name%>
+                    <% 
+                    while(teamCity.includes(" ") || teamName.includes(" ")){
+                        teamCity = teamCity.replace(" ", "");
+                        teamName = teamName.replace(" ", "");
+                    }
+                    var teamImage = teamCity + teamName;
+                    %>
+                    <li class="list-group-item teams">
+                        <a href="/teamStats/<%=teamCity%>-<%=teamName%>"  style="text-align: center;">
+                            <img src="../images/<%= teamImage %>.png" style="heigh: 50px; width: 50px; margin: 0 auto"> </img>
+                            <%=conferences[i].teamentry[j].team.City%> <%=conferences[i].teamentry[j].team.Name%>
+                        </a>
+                    </li>
+                    <!--<h4 style="text-align: center;"><%=conferences[i].teamentry[j].team.City%> <%=conferences[i].teamentry[j].team.Name%></h1>-->
+                <% } %>
+            <% } %>
+        </ul>
+        </div>
+    </div>
+</div>
+
+<script src="../scripts/team.js"></script>
+<% include ./partials/footer %>

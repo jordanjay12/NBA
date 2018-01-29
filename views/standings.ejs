@@ -1,0 +1,165 @@
+<% include ./partials/header %>
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+            crossorigin="anonymous">
+        </script>
+
+<div class="container">
+    <h1>Team Standings</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+    <div class="btn btn-primary btn-md col-md-4" id="showOverall" style="padding-left: 5px; padding-right: 5px">View Overall Standings</div>
+    <div class="btn btn-primary btn-md col-md-4" id="showConference" style="">View Conference Standings</div>
+    <div class="btn btn-primary btn-md col-md-4" id="showDivision" style="">View Division Standings</div>
+    </div>
+    <!--<div>-->
+    <!--     <select id="selectBox">-->
+    <!--        <option selected="selected" disabled="disabled">Sort by:</option>-->
+    <!--        <option value="wins">Wins</option>-->
+    <!--        <option value="ppg">Points per Game</option>-->
+    <!--        <option value="apg">Assists per Game</option>-->
+    <!--        <option value="rpg">Rebounds per Game</option>-->
+    <!--        <option value="spg">Steals per Game</option>-->
+    <!--        <option value="bpg">Blocks per Game</option>-->
+    <!--        <option value="tpg">Turnovers per Game</option>-->
+    <!--    </select>       -->
+    <!--</div>-->
+    <!--<br>-->
+    <!--<h3 id="orderedBy" style="text-align: center"></h3>-->
+    
+    <div id="overallStandings">
+    <h3>Overall Standings</h3>
+    <% var listOfTeams = data.overallteamstandings.teamstandingsentry %>
+        <table id="overallStandingsTable" class="standingsTable">
+            <tr>
+                <th>Ranking</th>
+                <th style="width: 175px">Team Name</th>
+                <th id="wins" name="wins" class="header wins">Wins</th>
+                <th id="lossHeader">Losses</th>
+                <th id="ppg" name="ppg" class="header ppg">Points per Game</th>
+                <th id="apg" name="apg" class="header apg">Assists per Game</th>
+                <th id="rpg" name="rpg" class="header rpg">Rebounds per Game</th>
+                <th id="spg" name="spg" class="header spg">Steals per Game</th>
+                <th id="bpg" name="bpg" class="header bpg">Blocks per Game</th>
+                <th id="tpg" name="tpg" class="header tpg">Turnovers per Game</th>
+            </tr>
+        <% for(var i = 0; i < listOfTeams.length; i++){ %>
+    
+            <tr class="teamRow">
+                <td><%=i+1%></td>
+                
+                <% var teamCity = listOfTeams[i].team.City%>
+                <% var teamName = listOfTeams[i].team.Name%>
+                <% 
+                while(teamCity.includes(" ") || teamName.includes(" ")){
+                    teamCity = teamCity.replace(" ", "");
+                    teamName = teamName.replace(" ", "");
+                }
+                %>
+                
+                <td><a href="/teamStats/<%=teamCity%>-<%=teamName%>"><%=listOfTeams[i].team.City %> <%=listOfTeams[i].team.Name %></a></td>
+                <td><%=listOfTeams[i].stats.Wins['#text'] %></td>
+                <td><%=listOfTeams[i].stats.Losses["#text"]%> </td>
+                <td><%=listOfTeams[i].stats.PtsPerGame["#text"] %></td>
+                <td><%=listOfTeams[i].stats.AstPerGame["#text"]%></td>
+                <td><%=listOfTeams[i].stats.RebPerGame["#text"]%></td>
+                <td><%=listOfTeams[i].stats.StlPerGame["#text"]%></td>
+                <td><%=listOfTeams[i].stats.BlkPerGame["#text"]%></td>
+                <td><%=listOfTeams[i].stats.TovPerGame["#text"]%></td>
+            </tr>
+            
+           
+        <% } %>        
+        </table>
+        <br>
+    </div>
+    <div id="conferenceStandings" style="display: none;"></div>
+    <div id="divisionStandings" style="display: none"></div>
+
+
+
+</div>
+
+ <script>
+        // // eventually this will be moved to its own js file
+        //     // converts the value of the select tags with numbers corresponding to which column they belong to
+        //     var legend = {
+        //         wins: 2,
+        //         ppg: 4,
+        //         apg: 5,
+        //         rpg: 6,
+        //         spg: 7,
+        //         bpg: 8,
+        //         tpg: 9
+        //     }
+            
+        //     // takes an index for which row of the table we should be sorting by
+        //     function sort(stat){
+        //         // I should be able to go throught the rows, grab an element from each of them and then compare it with another
+        //         var table = document.getElementById("overallStandingsTable");
+        //         var switching = true;
+        //         var rows, x, y;
+        //         var index = legend[stat];
+        //         while(switching){
+        //             switching = false;
+        //             rows = table.getElementsByTagName("tr");
+        //             // loop through all the table rows except for the first one which is just the headers
+        //             for(var i=1; i < rows.length-1; i++){
+        //                 shouldSwitch = false;
+        //                 x = rows[i].getElementsByTagName("td")[index];
+        //                 y = rows[i + 1].getElementsByTagName("td")[index];
+        //               // check if the two rows should switch place:
+        //               // need to first convert these to numbers because for strings "99" is greater than "100" because it compares the 9 and the 1 I guess
+        //               if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+        //                 //if so, mark as a switch and break the loop:
+        //                 shouldSwitch= true;
+        //                 break;
+        //               }
+        //             }
+        //             if (shouldSwitch) {
+        //               /*If a switch has been marked, make the switch
+        //               and mark that a switch has been done:*/
+        //               rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        //               switching = true;
+        //             }                    
+        //         }
+                
+        //         // Re-Rank all of the rows after switching which column the table is ordered by
+        //         rows = table.getElementsByTagName("tr");
+        //         for(var i = 1; i < rows.length; i++){
+        //             rows[i].getElementsByTagName("td")[0].innerHTML = i;
+        //         }
+                
+        //         // setting the row header back to its default style
+        //         var allHeaders = document.getElementsByTagName("th");
+        //         for(var i = 0; i < allHeaders.length; i++){
+        //             allHeaders[i].style.color = "black";
+        //             allHeaders[i].style.backgroundColor = "white";
+        //         }
+                
+        //         // setting the selected header to a different color to distinguish it
+        //         var headElement = rows[0].getElementsByTagName("th")[index];
+        //         headElement.style.color = "red";
+        //         headElement.style.backgroundColor = "yellow";
+        //         document.getElementById("orderedBy").textContent = "Ordered By: " + headElement.textContent;
+        //     }
+            
+        //     // Select on one of the elements of the select box changes the ordering of the table
+        //     document.getElementById("selectBox").addEventListener("change", function(){
+        //         sort(this.value);
+        //     })
+            
+        //     // adding click events to each of the column headers - allows us to sort them on click
+        //     var allHeaders = document.getElementsByClassName("header");
+        //     for(var i = 0; i < allHeaders.length; i++){
+        //         allHeaders[i].addEventListener("click", function(){
+        //             sort(this.id);
+        //         })
+        //     }
+        </script>
+
+<script src="scripts/standings.js"></script>
+<% include ./partials/footer %>

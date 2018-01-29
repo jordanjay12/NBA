@@ -1,0 +1,146 @@
+<% include ./partials/header %>
+
+<% var players = data.activeplayers.playerentry%>
+<% var currentLetter = null%>
+<h1>Welcome to the list of players page</h1>
+<h2 style="text-align: center">Search by Player Last Name</h2>
+<h2 id="alphabet" style="text-align: center"></h2>
+<script>
+    for (var i = 65; i <= 90; i++) {
+    $('#alphabet').append("<a href='#letter" + String.fromCharCode(i) + "'>" + String.fromCharCode(i) + "</a> ");
+}
+</script>
+<div class="container">
+        <input type="text" id="searchFor" onkeyup="myFunction()" placeholder = "Search for names...">
+</div>
+
+<div class="container" id="allPlayers">
+    <div class="row">
+        <div class="col-md-12">
+            <ul id="playerList">
+                <% for(var i = 0; i < players.length; i++){%>
+                    <% var currentPlayer = players[i]%>
+                    <% var firstName = currentPlayer.player.FirstName%>
+                    <% var lastName = currentPlayer.player.LastName%>
+                    <%
+                    var teamCity;
+                    var teamName;
+                    if(currentPlayer.team != null){
+                        teamCity = currentPlayer.team.City;
+                        teamName = currentPlayer.team.Name;
+                    }
+                    
+                    %>
+                    <% var firstNameDecInc = firstName%>
+                    <% var modifiedLastName = lastName%>
+                    <!--<% if(!lastName.startsWith(currentLetter)){%>-->
+                    <!--        <% if(lastName.startsWith("H") || lastName.startsWith("O")){ %>-->
+                    <!--            </ul>-->
+                    <!--            </div>-->
+                    <!--            <div class="col-md-4">-->
+                    <!--            <ul class="playerList">-->
+                    <!--        <% } %>-->
+                            <h3 id="letter<%=lastName[0]%>" class="letter"><%=lastName[0]%></h3>
+                            <% currentLetter = lastName[0]%>
+                    <!--<% } %>-->
+                    <% 
+                     // cannot have any decimals, hyphens or spaces in first or last name of player
+                     while(firstName.includes(".") || firstName.includes("-") || firstName.includes(" ")){
+                        firstName = firstName.replace(".", "");
+                        firstName = firstName.replace("-", "");
+                        firstName = firstName.replace(" ", "");
+                     }
+                     while(modifiedLastName.includes(".") || modifiedLastName.includes("-") || modifiedLastName.includes(" ")){
+                         modifiedLastName = modifiedLastName.replace(".", "");
+                         modifiedLastName = modifiedLastName.replace("-", "");
+                         modifiedLastName = modifiedLastName.replace(" ", "");
+                     }
+                     %>
+                    <li><a href="/playerStats/<%=firstName%>-<%=modifiedLastName%>"><span style=""><%=firstNameDecInc%> <%=lastName%></span> 	&nbsp 	&nbsp - 	&nbsp	&nbsp<span style=""><%=teamCity%> <%=teamName%></span> </a></li>
+  
+                <% }%>
+            </ul>
+        </div>
+    </div>    
+</div>
+
+<script>
+
+var filterLength = 0;
+
+function myFunction(){
+    
+    // maybe change this to only on enter
+    var input, filter, ul, li, a;
+    input = document.getElementById("searchFor");
+    // what we are going to be looking for
+    filter = input.value.toUpperCase();
+    // this is going to be different from the example since there are multiple "UL" on the page
+    // ul = document.getElementsByTagName("ul");
+    ul = document.getElementById("playerList");
+    li = ul.getElementsByTagName('li');
+    
+    if(filter.length == 0){
+        console.log("The filter length is zero");
+        var letters = document.getElementsByClassName("letter");
+        for(var i = 0; i < letters.length; i++){
+            letters[i].style.display = "";
+        }
+    }else if(filter.length == 1 || filter.length == 2 || filter.length == 3){
+        var letters = document.getElementsByClassName("letter");
+        for(var i = 0; i < letters.length; i++){
+            letters[i].style.display="none";
+        }
+    }
+    
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+        
+    // }
+    
+}
+
+</script>
+
+<style>
+
+#searchFor {
+    /*background-image: url('/css/searchicon.png'); */ /* Add a search icon to input */
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 100%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+}
+
+#playerList {
+    /* Remove default list styling */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#playerList li a {
+    border: 1px solid #ddd; /* Add a border to all links */
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #f6f6f6; /* Grey background color */
+    padding: 12px; /* Add some padding */
+    text-decoration: none; /* Remove default text underline */
+    font-size: 18px; /* Increase the font-size */
+    color: black; /* Add a black text color */
+    display: block; /* Make it into a block element to fill the whole list */
+}
+
+#playerList li a:hover:not(.header) {
+    background-color: #eee; /* Add a hover effect to all links, except for headers */
+}
+</style>
+<% include ./partials/footer %>

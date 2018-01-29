@@ -1,0 +1,276 @@
+<% include ./partials/header %>
+
+<style>
+    tr:hover{
+        font-weight: bold;
+    }
+    
+    td:hover{
+        font-weight: bold;
+    }
+    
+    .paginate_button{
+        padding: 2px !important;
+    }
+    
+</style>
+
+<% var players = data.cumulativeplayerstats.playerstatsentry %>
+<div class="container">
+    
+    <h1>League Leaders</h1>
+    
+    <!--
+    <select id="categorySelect" class="selectpicker">
+        <option selected="selected" disabled="disabled">Order By:</option>
+        <optgroup label="Offensive Stats">
+            <option value="PPG">Points per Game</option>
+            <option value="APG">Assists per Game</option>
+            <option value="FG%">Overall Field Goal %</option>
+            <option value="2PA">2 Pt Attempts per Game</option>
+            <option value="2PM">2 Pt Makes per Game</option>
+            <option value="2P%">2 Pt %</option>
+            <option value="3PA">3 Pt Attempts per Game</option>
+            <option value="3PM">3 Pt Makes per Game</option>
+            <option value="3P%">3 Pt %</option>
+            <option value="FTA">Free Throw Attempts per Game</option>
+            <option value="FT%">Free Throw %</option>            
+        </optgroup>
+        <optgroup label="Rebounding Stats">
+            <option value="RPG">Rebounds per Game</option>
+            <option value="OREB">Offensive Rebounds per Game</option>
+            <option value="DREB">Defensive Rebounds per Game</option>            
+        </optgroup>
+        <optgroup label="Defensive Stats">
+            <option value="SPG">Steals per Game</option>
+            <option value="BPG">Blocks per Game</option>
+        </optgroup>
+        <optgroup label="Miscellaneous Stats">
+            <option value="MPG">Minutes per Game</option>
+            <option value="TOVPG">Turnovers per Game</option>
+            <option value="PlusMinus">Plus Minus per game</option>        
+        </optgroup>
+    </select>
+    -->
+    <br>
+    <br>
+    
+    
+    <!--<div id="hiddenDiv" style="display: none;">-->
+    <!-- Necessary for having the table hidden until finished loading, table.style.display = "none" wasn't working properly - BUT this screws up the column widths for the player name... -->
+    <table id="displayTable" class="stripe order-column" style="overflow: auto;  /*visibility: hidden; */ ">
+        <thead style="background:white">
+        <tr>
+            <th id="headerRank"></th>
+            <th id="headerName">Name</th>
+            <th id="headerMPG" class="header">Min / G</th>
+            <th id="headerPPG" class="header" style="color: red">PPG</th>
+            <th id="headerAPG" class="header">APG</th>
+            <th id="headerRPG" class="header">RPG</th>
+            <th id="headerSPG" class="header">SPG</th>
+            <th id="headerBPG" class="header">BPG</th>
+            <th id="headerTOVPG" class="header">TOV/G</th>
+            <th id="headerFG%" class="header">Overall FG %</th>
+            <th id="header2PA" class="header">2Pt Atts / G</th>
+            <th id="header2PM" class="header">2Pt Makes / G</th>
+            <th id="header2P%" class="header">2Pt %</th>
+            <th id="header3PA" class="header">3Pt Atts / G</th>
+            <th id="header3PM" class="header">3Pt Makes / G</th>
+            <th id="header3P%" class="header">3Pt %</th>
+            <th id="headerFTA" class="header">FTA / G</th>
+            <th id="headerFT%" class="header">FT %</th>
+            <th id="headerOREB" class="header">Off Reb / G</th>
+            <th id="headerDREB" class="header">Def Reb / G</th>
+            <th id="headerPlusMinus" class="header">+/- / G</th>
+            
+        </tr>
+        </thead>
+        
+        <tbody>
+        <% for(var i = 0; i < players.length; i++){ %>
+           <tr class="contentRows" style="height: 60px">
+            <% var currentPlayer = players[i] %>
+            <% var stats = currentPlayer.stats %>
+            <!--<td><%= i+1%></td>-->
+            <td></td>
+            <% 
+            // Adding a link to the player stats page of that particular player
+            var firstName = currentPlayer.player.FirstName;
+            var lastName = currentPlayer.player.LastName;
+             // cannot have any decimals, hyphens or spaces in first or last name of player
+             while(firstName.includes(".") || firstName.includes("-") || firstName.includes(" ")){
+                firstName = firstName.replace(".", "");
+                firstName = firstName.replace("-", "");
+                firstName = firstName.replace(" ", "");
+             }
+             while(lastName.includes(".") || lastName.includes("-") || lastName.includes(" ")){
+                 lastName = lastName.replace(".", "");
+                 lastName = lastName.replace("-", "");
+                 lastName = lastName.replace(" ", "");
+             }
+             %>
+            <td><a href="/playerStats/<%=firstName%>-<%=lastName%>"><%=currentPlayer.player.FirstName%> <%=currentPlayer.player.LastName%></a></td>
+            
+            <td><%=Math.floor(stats.MinSecondsPerGame['#text']/60)%>:<%=stats.MinSeconds['#text']%60%></strong></td>
+            <td><%= stats.PtsPerGame['#text'] %></td>
+            <td><%= stats.AstPerGame['#text'] %></td>
+            <td><%= stats.RebPerGame['#text'] %></td>
+            <td><%= stats.StlPerGame['#text'] %></td>
+            <td><%= stats.BlkPerGame['#text'] %></td>
+            <td><%= stats.TovPerGame['#text'] %></td>
+            <td><%= stats.FgPct['#text'] %></td>
+            <td><%= stats.Fg2PtAttPerGame['#text'] %></td>
+            <td><%= stats.Fg2PtMadePerGame['#text'] %></td>
+            <td><%= stats.Fg2PtPct['#text'] %></td>
+            <td><%= stats.Fg3PtAttPerGame['#text'] %></td>
+            <td><%= stats.Fg3PtMadePerGame['#text'] %></td>
+            <td><%= stats.Fg3PtPct['#text'] %></td>
+            <td><%= stats.FtAttPerGame['#text'] %></td>
+            <td><%= stats.FtPct['#text'] %></td>
+            <td><%= stats.OffRebPerGame['#text'] %></td>
+            <td><%= stats.DefRebPerGame['#text'] %></td>
+            <td><%= stats.PlusMinusPerGame['#text'] %></td>
+            </tr>
+            
+
+        <% } %>
+        </tbody>
+
+    </table>
+    <!--</div>-->
+
+
+</div>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"></style>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+<!--<link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css"></link>-->
+<!--<link href="https://cdn.datatables.net/fixedheader/3.1.3/css/fixedHeader.dataTables.min.css"></link>-->
+<script src="https://cdn.datatables.net/fixedheader/3.1.3/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.3/css/fixedColumns.dataTables.min.css">
+
+<script src="//cdn.datatables.net/plug-ins/1.10.16/sorting/time.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        // document.getElementById("displayTable").style.display = "none";
+        // document.getElementById("displayTable").style.visibility = "hidden";
+        // $("#displayTable").DataTable();
+        var table = $('#displayTable').DataTable({
+            // fixedHeader: true,
+            scrollX: true,
+            scrollCollapse: true,
+            order: [[3, "desc"]],
+            // paging: false,
+            columnDefs: [{
+                // width: '100%',
+                searchable: true,
+                orderable: false,
+                // targets: 0
+                targets: [0,1]
+                // need to figure out the targets
+               
+            },
+                // allow for the time column to be sorted
+                { type: "time-uni", targets: 2},
+                { width: 100, targets: 1} // this seems to be the best way to set widths of a column
+            ],
+            fixedColumns:   {
+                leftColumns: 2
+            },
+            pagingType: "full_numbers",
+            aoColumns:[
+                // need to have one of these for each column
+                null,
+                null,
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] },
+                { "orderSequence": [ "desc" ] }
+            ],
+            initComplete: function(settings, json){
+                // document.getElementById("hiddenDiv").style.display = "block";
+                // document.getElementById("displayTable").style.visibility = "visible";
+                // $('#hide').css( 'display', 'block' );
+                // alert("Table has finished loading");
+                document.getElementById("displayTable").style.visibility = "visible";
+                
+                console.log("hiding the header of the table");
+                var headers = document.getElementsByClassName("dataTables_scrollHeadInner");
+                for(var i=0; i < headers.length; i++){
+                    console.log("Hiding the header: the following in the actual HTML DOM element");
+                    console.log(headers[i]);
+                    // headers[i].style.display = "none";
+                }
+            }
+        });
+        
+        table.on( 'order.dt search.dt', function () {
+            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+        } ).draw();
+        
+    // allow for sorting by time - in particular column 3
+    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+        "time-uni-pre": function (a) {
+            var uniTime;
+     
+            if (a.toLowerCase().indexOf("am") > -1 || (a.toLowerCase().indexOf("pm") > -1 && Number(a.split(":")[0]) === 12)) {
+                uniTime = a.toLowerCase().split("pm")[0].split("am")[0];
+                while (uniTime.indexOf(":") > -1) {
+                    uniTime = uniTime.replace(":", "");
+                }
+            } else if (a.toLowerCase().indexOf("pm") > -1 || (a.toLowerCase().indexOf("am") > -1 && Number(a.split(":")[0]) === 12)) {
+                uniTime = Number(a.split(":")[0]) + 12;
+                var leftTime = a.toLowerCase().split("pm")[0].split("am")[0].split(":");
+                for (var i = 1; i < leftTime.length; i++) {
+                    uniTime = uniTime + leftTime[i].trim().toString();
+                }
+            } else {
+                uniTime = a.replace(":", "");
+                while (uniTime.indexOf(":") > -1) {
+                    uniTime = uniTime.replace(":", "");
+                }
+            }
+            return Number(uniTime);
+        },
+     
+        "time-uni-asc": function (a, b) {
+            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+        },
+     
+        "time-uni-desc": function (a, b) {
+            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+        }
+    });
+
+        
+    } ); // end of document.ready
+
+</script>
+
+<style>.DTFC_LeftBodyLiner { overflow-x: hidden; }</style>
+
+<script src="../scripts/leagueLeaders.js"></script>
+
+<% include ./partials/footer %>

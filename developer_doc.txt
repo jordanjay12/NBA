@@ -1,0 +1,80 @@
+In order to have external javascript files connected to the HTML/EJS files we just need to include a regular script tag
+however this time the src will be to the scripts folder within the public directory, NOTE: we do NOT need to worry about correctly having the file path I don't think
+
+NOTE: I have deleted the other scripts directory that was not in the public directory. The only scripts that will be ran are the ones that are found in the public directly - public/scripts/<file.js>
+
+example: <script src="scripts/standings.js"></script> - WORKS
+alternatively: <script src="../scripts/<file.js>"</script> - ALSO WORKS
+
+If I was trying to do this with just plain HTML and no backend then it would have to be <script src="../scripts/standings.js"></script>
+because all of my actual EJS files are in my views folder.
+
+Environment Variables:
+    Environment variables need to be set for the username and password to the "mysportsfeed" API
+    ex. 
+        Set Environment Variables (console):
+            
+            Linux/Unix
+            1. export USERNAME=<username>
+            2. export PASSWORD=<password>
+            
+            Windows
+            1. set USERNAME=<username>
+            2. set PASSWORD=<password>
+            
+        Retrieve Environment Variables (node.js):
+            1. process.env.USERNAME
+            2. process.env.PASSWORD
+        
+Things that still need to be completed/fixed:
+
+1. Need to change the backend so that we are looking at the date and if we have to we should be displaying information about playoff games as well.
+    Also need to clean up the backend, there is a bunch of redundant code, now just call the function at the end of the file for retrieving information.
+2. Since we have the date on the game.ejs page - use that date to display in the header the date before and the date afters games.
+3. On the players page add a button that will always be visible on the page that will re-direct the user back to the top of the page
+    the page is long with all the available players
+4. Still need to add a favicon to each of the pages if possible, otherwise just use a generic NBA one - this has now been completed
+5. Have the scores on the schedule page (when displaying the live scores) automatically be refreshed at some interval
+    On the home page, when only one game is selected I should probably also have the interval be set there as well
+    Also have the scores on an individual game also be refreshed at some interval
+6. When the game is in overtime, it currently says quarter 5, but instead I want it to display which overtime it is actually in
+7. Get the game Staring lineups - however often times there isn't any data that is actually being returned yet.
+8. Changes still need to be made to the League Leaders page
+    include a loading icon while the table is loading - quite large becausae it contains data on all available players
+    
+9. League Leaders Page
+    Figure out if I can ge the drop-down menu working properly and having it scroll horizontally to the proper column
+    Change the background color of the row on hover as well to make it more obvious which row the user is hovering over
+    Still need to figure out if I can hide the table while it is loading, and then have it appear after
+    There are some font awesome loading icons that I could display, but I would need to have it overlap over top of the table
+    
+    
+MAJOR BUG:
+1. When games are first starting there is still an instance that isn't being caught and games are displaying NaN for quarter and time remaining
+    Futhermore, trying to view more of this game will also throw an error, I guess nothing could properly be returned from the call.
+    
+
+
+BUGS:
+
+2. Rebounds and play time is messed up still - but I think that just has to do with what is being returned in the data
+3. The amount of time / current quarter of games in session on home.ejs needs to be fixed - currently it is just showing undefined
+4. For games in progress I need the time remaining in the game if the game isn't complete yet.
+    this isn't available in gameboxscore though. --> I will need to use the game Scoreboard to find this
+6. For some reason there are times when everything is being returned when trying to lookup if the game has been played, in progress or completed
+    All 3 of them have the false attrinbute yet the game is complete
+    For some reason it has an extra field from all of the other ones - "currentIntermission" = 4 - Maybe just check to see if this one is not null (means that the game is in progress or is completed)
+    I checked if there is a currentIntermission, but more testing will need to be performed to ensure that it is working as intended.
+7. Apparently with game boxscore, I can sort the order that things are being returned, maybe I can do the sorting there to sort by time played, or points scored.
+8. On game.ejs if the game is not over yet, then it shouldn't say final on the last header
+9. Currently I have nothing on game.ejs for checking if the game is a playoff game or not
+    something within the fetchData function on the server side will have to check for this...
+10. Something seems to be going wrong for games that have just started - it is displaying:
+    quarter undefined, NaN: NaN - which is probably because nothing is there yet.
+11. I think another problem is what is occurring between quarters, for example in between the third and fourth 
+    quarter - the game scoreboard is being shown as undefined, NaN: NaN
+12. The current progress of the game on the game page is still not showing correctly.
+    even if the game is still in progress, things are being returned as NaN - but I think this is between...
+    probably need to check what the currentIntermission is and determine from there what should be presented.
+
+

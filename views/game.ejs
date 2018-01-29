@@ -1,0 +1,310 @@
+<% include ./partials/header %>
+<script src="../scripts/game.js"></script>
+
+
+<% if(typeof data != "undefined" && typeof data.gameboxscore.quarterSummary.quarter != "undefined"){ %>
+<% var game = data.gameboxscore.game%>
+<% var quarter = data.gameboxscore.quarterSummary%>
+<% var awayTeam = data.gameboxscore.awayTeam.awayPlayers.playerEntry%>
+<% var homeTeam = data.gameboxscore.homeTeam.homePlayers.playerEntry%>
+<% var awayTeamStats = data.gameboxscore.awayTeam.awayTeamStats%>
+<% var homeTeamStats = data.gameboxscore.homeTeam.homeTeamStats%>
+<% var quarters = data.gameboxscore.quarterSummary.quarter %>
+<% var date = game.date %>
+
+    
+<div class = "container">
+        <div class="jumbotron">
+            
+            
+            <div class="row row-eq-height" style="display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex;">
+                <div class = "col-lg-5" style="text-align: center; font-size: 4vw; white-space: nowrap">
+                    <h3 style="color: #0099cc; margin-top: 0px;">Away</h3>
+                    <% var awayTeamImage = (game.awayTeam.City + game.awayTeam.Name).replace(/ /g, '') %>
+                    <% var awayTeamCity = game.awayTeam.City.replace(" ", ""); %>
+                    <% var awayTeamName = game.awayTeam.Name.replace(" ", ""); %>
+                    
+                    <a href="/teamStats/<%=awayTeamCity%>-<%=awayTeamName%>">
+                        <img src="../images/<%=awayTeamImage%>.png" style="height: 200px; width: 200px; display: block; margin: 0 auto"> </img>
+                    </a>
+
+                    <div id="awayScore" class="GameScore" style="width: 50%; margin: 0 auto;">
+                            <%= quarter.quarterTotals.awayScore%>
+                    </div>
+                    <h1 style="font-size: 1.6vw">
+                        <a href="/teamStats/<%=awayTeamCity%>-<%=awayTeamName%>"style="cursor: pointer; color: black; text-decoration: none;"><%=game.awayTeam.City%> <%=game.awayTeam.Name%></a>
+                    </h1>
+                </div>
+                <div class="col-sm-2 align-middle" style="text-align: center;">
+                        <div class="col-sm-6" style="border-right: 1px solid black; height: 200px;"></div>
+                        <div class="col-sm-6" style="border-left: 1px solid black; height: 200px;"></div>
+                    <div class="col-sm-12">
+                        <h2 style="text-align: center; margin-top: 0px; vertical-align: middle; padding-top: 8px;" id="gameProgress"></h2>
+                    </div>
+                    <!--<h2 style="text-align: center; margin-top: 0px; vertical-align: middle;" id="gameProgress"></h2>-->
+                        <div class="col-sm-6" style="border-right: 1px solid black; height: 200px"></div>
+                        <div class="col-sm-6" style="border-left: 1px solid black; height: 200px"></div>
+                </div>
+                <div class = "col-lg-5" style="text-align: center; font-size: 4vw; white-space: nowrap">
+                    <h3 style="color: #0099cc; margin-top: 0px;">Home</h3>
+                    <% var homeTeamImage = (game.homeTeam.City + game.homeTeam.Name).replace(/ /g,'') %>
+                    <% var homeTeamCity = game.homeTeam.City.replace(" ",""); %>
+                    <% var homeTeamName = game.homeTeam.Name.replace(" ",""); %>
+                    <a href="/teamStats/<%=homeTeamCity%>-<%=homeTeamName%>">
+                        <img src="../images/<%= homeTeamImage %>.png" style="heigh: 200px; width: 200px; display: block; margin: 0 auto"> </img>
+                    </a>
+                    <div id="homeScore" class="GameScore" style="width: 50%; margin: 0 auto;">
+                            <%=quarter.quarterTotals.homeScore%>
+                    </div>
+                    <h1 style="font-size: 1.6vw">
+                        <a href="/teamStats/<%=homeTeamCity%>-<%=homeTeamName%>"style="cursor: pointer; color: black; text-decoration: none;"><%=game.homeTeam.City%> <%=game.homeTeam.Name%></a>
+                    </h1>
+                </div>
+                
+            </div>
+        </div>    
+
+    <div class="row" id="quarterTotals" style="text-align: center">
+        <table id="quarterSummaryTable" align="center" style="padding-bottom: 10px; margin-bottom: 20px; border: 0">
+            <tr style="border: 0">
+                <th style="border: 0; padding-left: 3px; padding-right:3px; width: 200px;"></th>
+                <th style="border: 0; padding-left: 3px; padding-right:3px; width: 50px;">First</th>
+                <th style="border: 0; padding-left: 3px; padding-right:3px; width: 50px;">Second</th>
+                <th style="border: 0; padding-left: 3px; padding-right:3px; width: 50px;">Third</th>
+                <th style="border: 0; padding-left: 3px; padding-right:3px; width: 50px;">Fourth</th>
+                <% if(quarters.length > 4){ %>
+                    <% for(var i = 0; i < quarters.length - 4; i++){ %>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px; width: 50px;">OT <%=i+1%></th>
+                    <% } %>
+                <% } %>
+                <th style="border: 0; padding-left: 3px; padding-right:3px; width: 50px;">Total</th>
+            </tr>
+            <tr>
+                <td><strong><%=game.awayTeam.City%> <%=game.awayTeam.Name%></strong></td>
+                <% quarters.forEach(function(quarter){ %>
+                    <td><%=quarter.awayScore%></td>
+                <% }) %>
+                <% for(var i = 0; i < 4 - quarters.length; i++){ %>
+                    <td>0</td>
+                <% } %>
+                <td><strong id="awayQuarterTotal"><%=quarter.quarterTotals.awayScore%></strong></td>
+
+            </tr>
+            <tr>
+                <td><strong><%=game.homeTeam.City%> <%=game.homeTeam.Name%></strong></td>
+                <% quarters.forEach(function(quarter){ %>
+                    <td><%=quarter.homeScore%></td>
+                <% }) %>
+                <% for(var i=0; i < 4 - quarters.length; i++){ %>
+                    <td>0</td>
+                <% } %>
+                <td><strong id="homeQuarterTotal"><%=quarter.quarterTotals.homeScore%></strong></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class ="row">
+        <div class ="col-md-6"> <!-- AWAY PLAYER COLUMN-->
+            <div class="AwayTeamStats">
+                <h1>Team Stats</h1>
+                <table style="width: 100%; border: 0;" class="team-stats">
+                    <tr style="border: 0;">
+                        <th style="border: 0">Rebounds</th>
+                        <th style="border: 0">Assists</th>
+                        <th style="border: 0">Blocks</th>
+                        <th style="border: 0">Steals</th>
+                        <th style="border: 0">Turnovers</th>
+                        <th style="border: 0">Fouls</th>
+                        <th style="border: 0">2PM/2PA</th>
+                        <th style="border: 0">3PM/3PMA</th>
+                        <th style="border: 0">FTM/FTA</th>
+                    </tr>
+                    <tr id="awayTeamStatsRow">
+                        <td><%=awayTeamStats.Reb['#text']%></td>
+                        <td><%=awayTeamStats.Ast['#text']%></td>
+                        <td><%=awayTeamStats.Blk['#text']%></td>
+                        <td><%=awayTeamStats.Stl['#text']%></td>
+                        <td><%=awayTeamStats.Tov['#text']%></td>
+                        <td><%=awayTeamStats.Fouls['#text']%></td>
+                        <td><%=awayTeamStats.Fg2PtMade['#text']%>/<%=awayTeamStats.Fg2PtAtt['#text']%></td>
+                        <td><%=awayTeamStats.Fg3PtMade['#text']%>/<%=awayTeamStats.Fg3PtAtt['#text']%></td>
+                        <td><%=awayTeamStats.FtMade['#text']%>/<%=awayTeamStats.FtAtt['#text']%></td>
+                    </tr>
+                </table>
+            </div>    
+            <h1>Player Stats</h1>
+            <!--<table style="width:100%; border: 0;" class="player-stats table table-striped table-bordered">-->
+            <table style="width: 100%; border: 0" id="awayPlayerStatsTable">
+                <tr style="border: 0">
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Name</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Points</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Rebounds</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Assists</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Blocks</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Steals</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Turnovers</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">Fouls</th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;"> +/- </th>
+                    <th style="border: 0; padding-left: 3px; padding-right:3px;">MIN</th>
+                </tr>
+                    <%awayTeam.forEach(function(player){ %>
+                        <tr id="<%=player.player.ID%>">
+                            <% 
+                            // cannot have any decimal places that occur in the name of the player
+                            // still need to figure out hyphens in other players
+                            var firstName = player.player.FirstName;
+                            var lastName = player.player.LastName;
+                             
+                            while(firstName.includes(".") || firstName.includes("-")){
+                                firstName = firstName.replace(".", "");
+                                firstName = firstName.replace("-", "");
+                            }
+                            while(lastName.includes(".") || lastName.includes("-")){
+                                lastName = lastName.replace(".", "");
+                                lastName = lastName.replace("-", "");
+                            }                            
+                            %>                            
+                            <td><a href="/playerStats/<%=firstName%>-<%=lastName%>"><%=player.player.FirstName%> <%=player.player.LastName%></a></td>
+                            <td><%=player.stats.Pts['#text']%> </td>
+                            <td><%=player.stats.Reb['#text']%></td>
+                            <td><%=player.stats.Ast['#text']%></td>
+                            <td><%=player.stats.Blk['#text']%></td>
+                            <td><%=player.stats.Stl['#text']%></td>
+                            <td><%=player.stats.Tov['#text']%></td>
+                            <td><%=player.stats.Fouls['#text']%></td>
+                            <td><%=player.stats.PlusMinus['#text']%></td>
+                            
+                            <td><%= Math.floor(player.stats.MinSeconds['#text']/60)%></td>
+                        </tr>
+                        <!--<li class = "players"> <%= player.player.FirstName%> <%=player.player.LastName%> Points = <%=player.stats.Pts['#text']%> Rebounds = <%=player.stats.Reb['#text']%> Assists = <%=player.stats.Ast['#text']%></li>-->
+                    <% }) %>
+            </table>
+        </div>
+        
+        <div class ="col-md-6"> <!-- HOME PLAYER COLUMN-->
+            <div class="HomeTeamStats">
+                <h1>Team Stats</h1>
+                <table style="width:100%; border: 0;" class="team-stats">
+                    <tr style="border: 0;">
+                        <th style="border: 0">Rebounds</th>
+                        <th style="border: 0">Assists</th>
+                        <th style="border: 0">Blocks</th>
+                        <th style="border: 0">Steals</th>
+                        <th style="border: 0">Turnovers</th>
+                        <th style="border: 0">Fouls</th>
+                        <th style="border: 0">2PM/2PA</th>
+                        <th style="border: 0">3PM/3PA</th>
+                        <th style="border: 0">FTM/FTA</th>
+                    </tr>
+                    <tr id="homeTeamStatsRow">
+                        <td><%=homeTeamStats.Reb['#text']%></td>
+                        <td><%=homeTeamStats.Ast['#text']%></td>
+                        <td><%=homeTeamStats.Blk['#text']%></td>
+                        <td><%=homeTeamStats.Stl['#text']%></td>
+                        <td><%=homeTeamStats.Tov['#text']%></td>
+                        <td><%=homeTeamStats.Fouls['#text']%></td>
+                        <td><%=homeTeamStats.Fg2PtMade['#text']%>/<%=homeTeamStats.Fg2PtAtt['#text']%></td>
+                        <td><%=homeTeamStats.Fg3PtMade['#text']%>/<%=homeTeamStats.Fg3PtAtt['#text']%></td>
+                        <td><%=homeTeamStats.FtMade['#text']%>/<%=homeTeamStats.FtAtt['#text']%></td>
+                    </tr>
+                </table>
+            </div>
+            <h1>Player Stats</h1>
+            <!--<table style="width: 100%; border: 0" class="player-stats table table-striped table-bordered">-->
+            <table style="width: 100%; border: 0" id="homePlayerStatsTable">
+            <div class="outer">
+                <div class="inner">
+                    <tr style="border: 0">
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Name</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Points</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Rebounds</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Assists</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Blocks</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Steals</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Turnovers</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">Fouls</th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;"> +/- </th>
+                        <th style="border: 0; padding-left: 3px; padding-right:3px;">MIN</th>
+                    </tr>
+                    <%homeTeam.forEach(function(player){ %>
+                        <tr id="<%=player.player.ID%>">
+                            <% 
+                            var firstName = player.player.FirstName;
+                            var lastName = player.player.LastName;
+                            while(firstName.includes(".") || firstName.includes("-") || firstName.includes(" ")){
+                                firstName = firstName.replace(".", "");
+                                firstName = firstName.replace("-", "");
+                                firstName = firstName.replace(" ", "");
+                            }
+                            while(lastName.includes(".") || lastName.includes("-") || lastName.includes(" ")){
+                                lastName = lastName.replace(".", "");
+                                lastName = lastName.replace("-", "");
+                                lastName = lastName.replace(" ", "");
+                            }                            
+                            %>
+                            
+                            <td><a href="/playerStats/<%=firstName%>-<%=lastName%>"><%=player.player.FirstName%> <%=player.player.LastName%></a></td>
+                            <td><%=player.stats.Pts['#text']%></td>
+                            <td><%=player.stats.Reb['#text']%></td>
+                            <td><%=player.stats.Ast['#text']%></td>
+                            <td><%=player.stats.Blk['#text']%></td>
+                            <td><%=player.stats.Stl['#text']%></td>
+                            <td><%=player.stats.Tov['#text']%></td>
+                            <td><%=player.stats.Fouls['#text']%></td>
+                            <td><%=player.stats.PlusMinus['#text']%></td>
+                            <td><%=Math.floor(player.stats.MinSeconds['#text']/60)%></td>                        
+                        </tr>
+                        <!--<li class = "players"> <%= player.player.FirstName%> <%=player.player.LastName%> Points = <%=player.stats.Pts['#text']%> Rebounds = <%=player.stats.Reb['#text']%> Assists = <%=player.stats.Ast['#text']%></li>-->
+                    <% }) %>                    
+                </div>
+            </div>
+                
+            </table>
+        </div>
+        
+        
+    </div>
+
+</div>
+
+<script>
+    // Set the current status of the game - start interval if necessary
+    getGameProgress('<%=date%>', '<%=game.awayTeam.Name%>', '<%=game.homeTeam.Name%>', '<%=game.awayTeam.Abbreviation%>', '<%=game.homeTeam.Abbreviation%>');
+    addPlayerStatsHover();
+</script>
+
+<% }else{ %>
+<!-- There is no data to display for this game, likely it has not occurred yet-->
+
+    <!--<script src="../scripts/game.js"></script>-->
+    
+    <div class="container">
+        <div class="jumbotron" id="jumbotron">
+            <a href="/" id="backButton" class="btn btn-primary btn-lg" role="button" style="text-align: center">Back to the list of games</i></a>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-4" id="leftColumn"></div>
+            <div class="col-sm-4" id="middleColumn"></div>
+            <div class="col-sm-4" id="rightColumn"></div>
+        </div>
+    </div>
+
+    <script>
+        var gameString = "<%=gameString%>";
+        var year = gameString.slice(0,4);
+        var month = gameString.slice(4,6);
+        var day = gameString.slice(6,8);
+        console.log("Year: " + year + " month: " + month + " day: " + day);
+        console.log(gameString.slice(0,4));
+        
+        
+        getGameInfo("<%=gameString%>", true);
+        setBackButton(gameString);
+    </script>
+
+<% } %>
+
+
+<% include ./partials/footer %>

@@ -1,0 +1,165 @@
+<% include ./partials/header %>
+
+<script src="../scripts/moment.js"></script>
+
+<div class="container">
+    <% if(data.dailygameschedule.gameentry != undefined){ %>
+    <div class ="jumbotron">
+        <div class="row row-eq-height">
+            <div class="col-sm-2" style="text-align: center">
+                <a id="jumbotronLeftButton" href="#"><button class="btn glyphicon glyphicon-circle-arrow-left" id="largeLeftButton" style="width:100%; height: 300px; font-size: 400%; background: #eee"></button></a>
+            </div>
+            <div class="col-sm-8" style="text-align: center;">
+                <% var games = data.dailygameschedule.gameentry %>
+                <% var expandedDate = misc.expandedDate %>
+                <h1 id="titleHeader">NBA Schedule</h1>
+                <h1><%=expandedDate%></h1>
+                <!--<h1><%=games[0].date%></h1>-->
+                
+                <% if(typeof playoff != "undefined"){ %>
+                    <h1>This is a playoff game</h1>
+                <% } %>
+                <div class="btn btn-primary btn-lg" id="liveButton" style="text-align: center">Live Scoreboard</div>
+                
+            </div>
+            <div class="col-sm-2" style="text-align: center;">
+                <a id="jumbotronRightButton" href="#" ><button class="btn glyphicon glyphicon-circle-arrow-right" id="largeRightButton" style="width:100%; height: 300px; font-size: 400%; background: #eee"></button></a>
+            </div>
+        </div>
+
+
+        
+    </div>
+    
+    <% games.forEach(function(game){ %>
+        <!--<h2>-->
+        <!--    <%=game.awayTeam.City%> <%= game.awayTeam.Name%> vs. <%=game.homeTeam.City%> <%=game.homeTeam.Name%> - <%=game.time%>-->
+        <!--    <% var date = games[0].date.replace(/-/g, "")%>-->
+        <!--    <a href="/game/<%=date%>-<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>" class="btn btn-primary btn-lg" role="button" style="width:100px"><i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></a>-->
+        <!--</h2>-->
+        <% var date = games[0].date.replace(/-/g, "")%>
+        <div class = "row" id="<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>-outer" style="margin-bottom: 5px; background-color: #eee; border-radius: 10px">
+            <div class="" id="<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>-inner">
+                    <div class="col-sm-5">
+                        <h2 style="text-align: center;"><%=game.awayTeam.City%> <%= game.awayTeam.Name%></h2>
+                        <% var awayTeamLink = game.awayTeam.City.replace(/ /g, '') + "-" + game.awayTeam.Name.replace(/ /g, '') %>
+                        <% var teamImage = (game.awayTeam.City + game.awayTeam.Name).replace(/ /g, '') %>
+                        <a href="/teamStats/<%=awayTeamLink%>">
+                            <img src="../images/<%=teamImage%>.png" style="height: 150px; width: 150px; display: block; margin: 0 auto"> </img>
+                        </a>
+                        <h3 style="text-align: center; margin-top: 0px; margin-bottom: 0px;" id="<%=game.awayTeam.ID%>" class="teamRecords"></h3>
+                    </div>
+                    <div class="col-sm-2" style="text-align: center">
+                        <% var startTime = game.time;
+                           var hour;
+                           if(startTime.endsWith("PM") && !startTime.startsWith("12")){
+                               // then I want to replace everything before the :
+                               hour = parseInt(startTime.substring(0, startTime.indexOf(":")));
+                               var beforeMod = hour + 12 -3;
+                               hour = (hour + 12 - 3) % 12;
+                               if(hour == 0){
+                                   hour = 12;
+                               }
+                               if(beforeMod < 12){
+                                  startTime = hour.toString() + startTime.substring(startTime.indexOf(":"), startTime.length - 2) + "AM";
+                               }else{
+                                   startTime = hour.toString() + startTime.substring(startTime.indexOf(":"));
+                               }
+                           }
+                        %>
+                        <h3 style="text-align: center; margin-top: 30px"><%=startTime%></h3>
+                        <div class="btn btn-primary btn-lg displayScore" id="<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>" style="margin: 0 auto; width: 125px">Score</div>                        
+                        <br>
+                        <br>
+                        <a href="/game/<%=date%>-<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>" class="btn btn-primary btn-lg" role="button" style="width:125px; text-align: center; margin: 0 auto;"><i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="col-sm-5">
+                        <h2 style="text-align: center;"><%=game.homeTeam.City%> <%=game.homeTeam.Name%></h2>
+                        <% var homeTeamLink = game.homeTeam.City.replace(/ /g, '') + "-" + game.homeTeam.Name.replace(/ /g, '') %>
+                        <% var teamImage = (game.homeTeam.City + game.homeTeam.Name).replace(/ /g,'') %>
+                        <a href="/teamStats/<%=homeTeamLink%>">
+                            <img src="../images/<%= teamImage %>.png" style="heigh: 150px; width: 150px; display: block; margin: 0 auto"> </img>
+                        </a>
+                        <h3 style="text-align: center; margin-top: 0px; margin-bottom: 0px;" id="<%=game.homeTeam.ID%>" class="teamRecords"></h3>
+                    </div>
+                <div style="margin: 0  auto; width: 85%; text-align: center">
+                </div>
+            </div>
+            <div class="thumbnail" id="move-in-to-place" style="opacity:0">
+            </div>
+        </div>
+        
+        </h2>
+    <% }) %>
+    
+    <script src="../scripts/home.js"></script>
+    <script>
+        var date = "<%=games[0].date%>";
+        var year = date.substring(0,4);
+        // console.log(year);
+        var month =  date.substring(5,7);
+        // console.log(month);
+        var day = date.substring(8,10);
+        // console.log(day);
+        var day;
+        // YearMonthDay is the format that we want
+        var currentDate = year+month+day;
+        console.log(currentDate);
+        
+        var momentDate = year + "-" + month + "-" + day;
+        console.log(momentDate);
+        
+        setHeaderNextDate(momentDate);
+        setHeaderPrevDate(momentDate);
+        
+        setJumbotronButtons(momentDate);
+        
+        // also need to include the season that we should be looking for
+        // and we should also include some kind of flag for playoffs
+        // app.js should be telling us whether or not the data that is displayed on the page is a playoff game or not
+        
+        <% if(typeof playoff != "undefined"){ %>
+            // should be rendering the game as a regular season game
+            var playoff = year + "-playoff";
+            
+            // Retrieve the Playoff scoreboard
+            getScoreboard(currentDate, playoff);
+            getTeamRecords(playoff);
+            startInterval(currentDate, playoff);
+        <% }else{ %>
+            // should be rendering the game as a playoff game
+            var regular;
+            
+            if(parseInt(month) >= 9){
+                // then use the <currentYear>-<nextYear>
+                var nextYear = parseInt(year) + 1;
+                regular = year + "-" + nextYear + "-regular";
+            }else{
+                // then use the <prevYear>-<currentYear>
+                var prevYear = parseInt(year)-1;
+                regular = prevYear + "-" + year + "-regular";
+            }
+            
+            // Retrieve the regular season scoreboard
+            getScoreboard(currentDate, regular);
+            getTeamRecords(regular);
+            startInterval(currentDate, regular);
+        <% } %>
+    </script>   
+    
+    
+    
+    
+    
+    <% }else{%>
+    <div class="jumbotron">
+        <% var date = new Date() %>
+        <% var year = today.slice(0,4)
+           var month = today.slice(4,6);
+           var day = today.slice(6); %>
+        <h1>There are no games scheduled for this date <%=year%>-<%=month%>-<%=day%></h1>  
+    </div>
+    <% } %>
+</div>
+
+<% include ./partials/footer %>

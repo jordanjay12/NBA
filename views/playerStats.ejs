@@ -1,0 +1,177 @@
+<% include ./partials/header %>
+
+<% var player = data.cumulativeplayerstats.playerstatsentry%>
+<% if(player != null){ %>
+<% var firstName = player[0].player.FirstName%>
+<% var lastName = player[0].player.LastName%>
+<% var jerseyNumber = player[0].player.JerseyNumber%>
+<% var position = player[0].player.Position%>
+<% var team = player[0].team%>
+<% var stats = player[0].stats%>
+<% var season = option.slice(0,9) %>
+<div class="container">
+    <h1><%= firstName%> <%=lastName%></h1>
+
+    <div class="row">
+        <div class ="col-md-3">
+            <img src="" height="80" width="80" align="left" style="display: none" id="playerPicture">
+            <p class ="lead"><%=season%> Regular Season</p>
+
+            <% var teamCity = team.City%>
+            <% var teamName = team.Name%>
+            <% 
+            while(teamCity.includes(" ") || teamName.includes(" ")){
+                teamCity = teamCity.replace(" ", "");
+                teamName = teamName.replace(" ", "");
+            }
+            %>
+
+            <li class="list-group-item" id="currentTeam"><a href="/teamStats/<%=teamCity%>-<%=teamName%>"><strong style="color: black">Team:</strong> <%=team.City%> <%=team.Name%></a></li>
+            <li class="list-group-item" id="jerseryNumber"><strong>Jersey Number: <%= jerseyNumber%></strong></li>
+            <li class="list-group-item" id="PPG"><strong># of Games Played: <%=stats.GamesPlayed['#text']%></strong></li>
+            <li class="list-group-item" id="position"><strong>Position: <%=position%></strong></li>
+            <li class="list-group-item" id="PPG"><strong>Points per Game: <%= stats.PtsPerGame['#text']%></strong></li>
+            <li class="list-group-item" id="APG"><strong>Assists per Game: <%= stats.AstPerGame['#text']%></strong></li>
+            <li class="list-group-item" id="RPG"><strong>Rebounds per Game: <%= stats.RebPerGame['#text']%></strong></li>
+            <li class="list-group-item" id="SPG"><strong>Steals per Game: <%=stats.StlPerGame['#text']%></strong></li>
+            <li class="list-group-item" id="BPG"><strong>Blocks per Game: <%=stats.BlkPerGame['#text']%></strong></li>
+            <li class="list-group-item" id="ToPG"><strong>Turnovers per Game: <%=stats.TovPerGame['#text']%></strong></li>
+            <li class="list-group-item" id="MinPG"><strong>Minutes per Game: <%=Math.floor(stats.MinSecondsPerGame['#text']/60)%>:<%=stats.MinSeconds['#text']%60%></strong></li>
+        </div>
+        <div class="col-md-9">
+            <h2>Advanced Stats</h2>
+            <h3>Scoring</h3>
+            <table>
+                <tr>
+                    <th>Total Points Scored</th>
+                    <th>FGA/G</th>
+                    <th>FG%</th>
+                    <th>Total 2 Pt Makes & Attempts</th>
+                    <th>2 Pt %</th>
+                    <th>2 Pt Makes & Attempts / Game</th>
+                    <th>Total 3 Pt Makes and Attempts</th>
+                    <th>3 Pt %</th>
+                    <th>3 Pt Makes & Attempts / Game</th>
+                    <th>FT Made & Att</th>
+                    <th>FT %</th>
+                    <th>FTA/G</th>
+                </tr>
+                <tr>
+                    <td><%=stats.Pts['#text']%></td>
+                    <td><%=stats.FgAttPerGame['#text']%></td>
+                    <td><%=stats.FgPct['#text']%></td>
+                    <td><%=stats.Fg2PtMade['#text']%>/<%=stats.Fg2PtAtt['#text']%></td>
+                    <td><%=stats.Fg2PtPct['#text']%></td>
+                    <td><%=stats.Fg2PtMadePerGame['#text']%>/<%=stats.Fg2PtAttPerGame['#text']%></td>
+                    <td><%=stats.Fg3PtMade['#text']%>/<%=stats.Fg3PtAtt['#text']%></td>
+                    <td><%=stats.Fg3PtPct['#text']%></td>
+                    <td><%=stats.Fg3PtMadePerGame['#text']%>/<%=stats.Fg3PtAttPerGame['#text']%></td>
+                    <td><%=stats.FtMade['#text']%>/<%=stats.FtAtt['#text']%></td>
+                    <td><%=stats.FtPct['#text']%></td>
+                    <td><%=stats.FtAttPerGame['#text']%></td>
+                </tr>
+            </table>
+            <!--<p>Overall Points Scored for season : <%= stats.Pts['#text']%></p>-->
+            <!--<p>Free throws made/attempted <%=stats.FtMade['#text']%>/<%=stats.FtAtt['#text']%>. Free throw percentage:  <%=stats.FtPct['#text']%></p>-->
+            <!--<p>Free throw attempted per game <%=stats.FtAttPerGame['#text']%></p>-->
+            <!--<p>Free throw percentage <%=stats.FtPct['#text']%></p>-->
+            <!--<p>Field goals attempted per game <%=stats.FgAttPerGame['#text']%></p>-->
+            <!--<p>Field Goal Percentage <%=stats.FgPct['#text']%></p>-->
+            <!--<p>2 Point Makes and Attempts <%=stats.Fg2PtMade['#text']%>/<%=stats.Fg2PtAtt['#text']%></p>-->
+            <!--<p>2 Point Field Goal Percentage <%=stats.Fg2PtPct['#text']%></p>-->
+            <!--<p>Overall number of 2 pt field goals made: <%=stats.Fg2PtMade['#text']%></p>-->
+            <!--<p>2 Point attempts and makes per game. Attempts <%=stats.Fg2PtAttPerGame['#text']%>. Makes <%=stats.Fg2PtMadePerGame['#text']%></p>-->
+            <!--<p>3 Point makes and attempts <%=stats.Fg3PtMade['#text']%>/<%=stats.Fg3PtAtt['#text']%></p>-->
+            <!--<p>3 Point attempts and makes per game. Attempts <%=stats.Fg3PtAttPerGame['#text']%>. Makes <%=stats.Fg3PtMadePerGame['#text']%></p>-->
+            <!--<p>3 Point Field Goal Percentage <%=stats.Fg3PtPct['#text']%></p>-->
+            <h3>Rebounding</h3>
+            <table>
+                <tr>
+                    <th>Total Rebounds</th>
+                    <th>Total Def Rebounds</th>
+                    <th>Def Reb / G</th>
+                    <th>Total Off Rebounds</th>
+                    <th>Off Reb / G</th>
+                </tr>
+                <tr>
+                    <td><%=stats.Reb['#text']%></td>
+                    <td><%=stats.DefReb['#text']%></td>
+                    <td><%=stats.DefRebPerGame['#text']%></td>
+                    <td><%=stats.OffReb['#text']%></td>
+                    <td><%=stats.OffRebPerGame['#text']%></td>
+                </tr>
+            </table>
+            <!--<p>Overall Rebounds for the season <%=stats.Reb['#text']%></p>-->
+            <!--<p>Defensive Rebounds per game <%=stats.DefRebPerGame['#text']%></p>-->
+            <!--<p>Offensive Rebounds per game <%=stats.OffRebPerGame['#text']%></p>-->
+            
+            <h3>Assists and Turnovers</h3>
+            <table>
+                <tr>
+                    <th>Total Assists</th>
+                    <th>Assists / G</th>
+                    <th>Total Turnovers</th>
+                    <th>Turnovers / G</th>
+                    <th>Assists : Turnover</th>
+                </tr>
+                <tr>
+                    <td><%=stats.Ast['#text']%></td>
+                    <td><%=stats.AstPerGame['#text']%></td>
+                    <td><%=stats.Tov['#text']%></td>
+                    <td><%=stats.TovPerGame['#text']%></td>
+                    <td><%=(stats.Ast['#text'] /stats.Tov['#text']).toFixed(1)%> </td>
+                </tr>
+            </table>
+            <!--<p>Overall Assists for the season: <%= stats.Ast['#text']%></p>-->
+            <!--<p>Turnovers and Turnovers per game <%=stats.Tov['#text']%>, <%=stats.TovPerGame['#text']%> per game</p>-->
+            
+            <h3>Defense</h3>
+            <table>
+                <tr>
+                    <th>Steals / G</th>
+                    <th>Total Steals</th>
+                    <th>Blocks / G</th>
+                    <th>Total Blocks</th>
+                </tr>
+                <tr>
+                    <td><%=stats.StlPerGame['#text']%></td>
+                    <td><%=stats.Stl['#text']%></td>
+                    <td><%=stats.BlkPerGame['#text']%></td>
+                    <td><%=stats.Blk['#text']%></td>
+                </tr>
+            </table>
+            <!--<p>Steals and Steals per game <%=stats.Stl['#text']%>, <%=stats.StlPerGame['#text']%> per game</p>-->
+            <!--<p>Blocks and Blocks per game <%=stats.Blk['#text']%>, <%=stats.BlkPerGame['#text']%> per game</p>-->
+            <p>Number of shots blocked, and number of shots blocked per game <%=stats.BlkAgainst['#text']%>, <%=stats.BlkAgainstPerGame['#text']%> per game</p>
+            <h3>Miscellaneous</h3>
+            <table>
+                <tr>
+                    <th>Overall + / -</th>
+                    <th>+ / - per game</th>
+                    <th>Totals Minutes Played</th>
+                    <th>Minutes Played / G</th>
+                </tr>
+                <tr>
+                    <td><%=stats.PlusMinus['#text']%></td>
+                    <td><%=stats.PlusMinusPerGame['#text']%></td>
+                    <td><%=Math.floor(stats.MinSeconds['#text']/60)%>:<%=stats.MinSeconds['#text']%60%></td>
+                    <td><%=Math.floor(stats.MinSecondsPerGame['#text']/60)%>:<%=stats.MinSeconds['#text']%60%></td>
+                </tr>
+            </table>
+            <!--<p>Overall plus minus and plus minus per game <%=stats.PlusMinus['#text']%>, <%=stats.PlusMinusPerGame['#text']%> per game</p>-->
+            <!--<p>Total minutes played and minutes played per game <%=Math.floor(stats.MinSeconds['#text']/60)%>:<%=stats.MinSeconds['#text']%60%>, <%=Math.floor(stats.MinSecondsPerGame['#text']/60)%>:<%=stats.MinSeconds['#text']%60%> per game</p>            -->
+        </div>
+    </div>
+</div>
+
+<% }else{ %>
+<div class="container" style="text-align: center">
+    <!--There is no information to display to the user, -->
+    <h1>There is no information to be displayed for the selected player</h1>
+    <a href="/players" class="btn btn-primary btn-lg" role="button" style="text-align: center">Back to the list of players</a>
+</div>
+
+<% } %>
+
+<script src="../scripts/playerStats.js"></script>
+<% include ./partials/footer %>

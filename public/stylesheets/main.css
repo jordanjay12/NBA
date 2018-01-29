@@ -1,0 +1,321 @@
+
+.thumbnail{
+    width: 100%;
+}
+
+h1{
+    text-align: center;
+}
+
+.players{
+    text-align: center;
+    border: 1px solid black;
+    list-style-type: none;
+}
+
+.player-stats{
+    border: 1px solid black;
+    text-align: center;
+}
+
+table, th, td{
+    border: 1px solid black;
+    text-align: center;
+}
+
+.standingsTable{
+    margin: 0 auto;
+}
+
+tr:nth-child(even){
+    background-color: #dddddd;
+}
+
+.GameScore{
+    border: 3px solid #0099cc;
+    border-radius: 25px;
+}
+
+.GamePageScores{
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 4vw;
+}
+
+.gameStatus{
+    margin-top: 30px;
+}
+
+.gameTime{
+    margin-top: 0px;
+}
+
+.header{
+    cursor: pointer;
+}
+
+.rowHover{
+    background-color: yellow !important;
+}
+
+.nextButtonHover{
+    -webkit-box-shadow: 10px 0 5px -2px #000000;
+    box-shadow: 10px 0 0px 0px #000000;
+}
+
+.prevButtonHover{
+    -webkit-box-shadow: -10px 0 5px -2px #000000;
+    box-shadow: -10px 0 0px 0px #000000;
+}
+
+/* Primary and Secondary colors for all of the teams 
+    Eastern conference teams followed by Western conference teams
+    Alphabeical order based on team name
+*/
+
+.HawksPrimary{
+    color: 	#E31836;
+}
+
+.HawksSecondary{
+    color: #FFFFFF;
+    /* This may change if I want to use something else other than just white for the secondary color */
+}
+
+.CelticsPrimary{
+    color: 	#0D7B4B;
+}
+
+.CelticsSecondary{
+    color: 	#C19259;
+}
+
+.NetsPrimary{
+    color: #000000;
+}
+
+.NetsSecondary{
+    color: #FFFFFF;
+}
+
+.HornetsPrimary{
+    color: #008EA6;
+}
+
+.HornetsSecondary{
+    color: #171161;
+}
+
+.BullsPrimary{
+    color: #C3051F;
+}
+
+.BullsSecondary{
+    color: #000000;
+}
+
+.CavaliersPrimary{
+    color: #870D3D;
+}
+
+.CavaliersSecondary{
+    color: #FDBE10;
+}
+
+.PistonsPrimary{
+    color: #E8032E;
+}
+
+.PistonsSecondary{
+    color: #014DAF;
+}
+
+.PacersPrimary{
+    color: #FFC526;
+}
+
+.PacersSecondary{
+    color: #002E62;
+}
+
+.HeatPrimary{
+    color: #D20022;
+}
+
+.HeatSecondary{
+    color: #FDC419;
+}
+
+.BucksPrimary{
+    color: #0D4621;
+}
+
+.BucksSecondary{
+    color: #F3EDD5;
+}
+
+.KnicksPrimary{
+    /*color: #E8631E;*/
+    /*background-color: #E8631E;*/
+    border: 3px solid #E8631E;
+}
+
+.KnicksSecondary{
+    border: 3px solid #1349A3;
+    /*color: #1349A3;*/
+}
+
+.MagicPrimary{
+    color: 	#0178BB;
+}
+
+.MagicSecondary{
+    color: #FAFBF9;
+}
+
+/* Not allowed to have a number be the start of a class or an ID,
+ will have to do a client-side translation to acommodate for this */
+.SeventySixersPrimary{
+    color: #0169BB;
+}
+
+.SeventySixersSecondary{
+    color: #F71349;
+}
+
+.RaptorsPrimary{
+    color: #D40E3B;
+}
+
+.RapatorsSecondary{
+    color: #000000;
+}
+
+.WizardsPrimary{
+    color: 	#012B5A;
+}
+
+.WizardsSecondary{
+    color: 	#D71316;
+}
+
+.MavericksPrimary{
+    color: 	#051922;
+}
+
+.MavericksSecondary{
+    color: #026AB6;
+}
+
+.NuggetsPrimary{
+    color: #4C8ECB;
+}
+
+.NuggetsSecondary{
+    color: #FEB724;
+}
+
+.WarriorsPrimary{
+    color: #0146AD;
+}
+
+.WarriorsSecondary{
+    color: #F8C536;
+}
+
+.RocketsPrimary{
+    color: #D40D42;
+}
+
+.RocketsSecondary{
+    color: #FDFDFC;
+}
+
+.LakersPrimary{
+    color: #542583;
+}
+
+.LakersSecondary{
+    color: #FFB321;
+}
+
+.ClippersPrimary{
+    color: #016BB8;
+}
+
+.ClippersSecondary{
+    color: #ED174C;
+}
+
+.GrizzliesPrimary{
+    color: 	#6189BC;
+}
+
+.GrizzliesSecondary{
+    color: #FEB32C;
+}
+
+.TimberwolvesPrimary{
+    color: 	#002A5C;
+}
+
+.TimberwolvesSecondary{
+    color: #76BE4A;
+}
+
+.PelicansPrimary{
+    color: #072A5B;
+}
+
+.PelicansSecondary{
+    color: #B6985A;
+}
+
+.ThunderPrimary{
+    color: #027EC4;
+}
+
+.ThunderSecondary{
+    color: 	#EE522C;
+}
+
+.SunsPrimary{
+    color: #EB971B;
+}
+
+.SunsSecondary{
+    color: 	#391366;
+}
+
+.BlazersPrimary{
+    color: #D70F15;
+}
+
+.BlazersSecondary{
+    color: #000000;
+}
+
+.KingsPrimary{
+    color: 	#2C1F5F;
+}
+
+.KingsSecondary{
+    color: #B5BABE;
+}
+
+.SpursPrimary{
+    color: 	#C7CDD0;
+}
+
+.SpursSecondary{
+    color: #000000;
+}
+
+.JazzPrimary{
+    color: #0D2241;
+}
+
+.JazzSecondary{
+    color: #FAA700;
+}

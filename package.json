@@ -1,0 +1,23 @@
+{
+  "name": "sports",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "btoa": "^1.1.2",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "express-favicon": "^2.0.0",
+    "method-override": "^2.3.7",
+    "moment": "^2.19.1",
+    "moment-timezone": "^0.5.13",
+    "request": "^2.81.0",
+    "serve-favicon": "^2.4.5"
+  }
+}
