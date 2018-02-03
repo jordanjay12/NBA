@@ -9,8 +9,8 @@ var timezone = require('moment-timezone');
 
 var favicon = require('serve-favicon');
 
-var username = process.env.USERNAME;
-var password = process.env.PASSWORD;
+var username = process.env.NBAUSERNAME;
+var password = process.env.NBAPASSWORD;
 
 console.log(username);
 console.log(password);

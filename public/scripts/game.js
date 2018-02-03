@@ -886,6 +886,23 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                 // The game is over
                 console.log("The game is completed");
                 gameProgress.innerHTML = "Finished";
+
+                var awayQuarterTotal = document.getElementById("awayQuarterTotal").innerHTML;
+                var homeQuarterTotal = document.getElementById("homeQuarterTotal").innerHTML;
+                
+                // TODO: Testing will need to be performed on this to see if it is working as intended.
+                var currentAwayScore = parseInt(awayQuarterTotal) >= currentGame.awayScore ? parseInt(awayQuarterTotal) : currentGame.awayScore;
+                var currentHomeScore = parseInt(homeQuarterTotal) >= currentGame.homeScore ? parseInt(homeQuarterTotal) : currentGame.homeScore;
+                
+                // Update the Away Score
+                $("#awayScore").fadeOut(1000,function(){
+                    $(this).html(currentAwayScore).fadeIn(2000);  
+                });
+                        
+                // Update the Home Score
+                $("#homeScore").fadeOut(1000,function(){
+                    $(this).html(currentHomeScore).fadeIn(2000);
+                });
                 
                 // Stop both of the ongoing interval timers
                 clearInterval(boxScoreTimer);

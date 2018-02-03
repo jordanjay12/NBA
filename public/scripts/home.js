@@ -546,8 +546,24 @@ function startInterval(date, season){
                         }
                     }
                     
-                    
-                    if(gameStats.isInProgress == "true" || typeof gameStats.timeRemaining != "undefined"){
+                    // Check to see if the game is over
+                    var tempAwayScore = document.getElementById(gameId + "-awayScore");
+                    var tempHomeScore = document.getElementById(gameId + "-homeScore");
+
+                    // check to see if the game status div has "Completed" or not
+                    var gameStatus = document.getElementById(gameId + "-status");
+
+
+
+                    if(gameStats.isCompleted == "true" && !gameStatus.innerHTML.includes("Completed")){
+                        // the game is completed, but still needs to be updated
+
+                        var gameStatus = document.getElementById(gameId + "-div");
+                        gameStatus.innerHTML = updateTimeRemaining(gameStats);
+
+                        tempAwayScore.innerHTML = gameStats.awayScore;
+                        tempHomeScore.innerHTML = gameStats.homeScore;
+                    }else if(gameStats.isInProgress == "true" || typeof gameStats.timeRemaining != "undefined"){
                         // then the game is in progress -- only update the game if the game is in progress
                         console.log("The game is in progress");
                         var awayScoreDiv = document.getElementById(gameId + "-awayScore");
@@ -559,25 +575,16 @@ function startInterval(date, season){
                         var oldAwayScore = awayScoreDiv.innerHTML;
                         var oldHomeScore = homeScoreDiv.innerHTML;
                         
-                        // this is going to have a different text so I will need to check for it
-                        // var oldGameStatus = gameStatus.innerHTML;
-                        // console.log("The value of oldGameStatus is : " + oldGameStatus);
-                        
-                        
-                        // gameStatus.innerHTML = updateTimeRemaining(gameStats);
-                        
-                        // TODO: I also need to update the game status depending on if anything has changed
-                        // check to see what the current quarter is, and the amount of time remaining
-                        
-                        // I only want to be changing these if an update has been made to the game
-                        // Currently just checking for differences in home and away scores - will need to also check for the game status as well
                         if(oldAwayScore != gameStats.awayScore || oldHomeScore != gameStats.homeScore){
                             gameStatus.innerHTML = updateTimeRemaining(gameStats);
                             console.log("should be updating the game with the following scores");
                             console.log(gameStats.awayScore);
                             console.log(gameStats.homeScore);
-                            document.getElementById(gameId + "-awayScore").innerHTML = gameStats.awayScore;
-                            document.getElementById(gameId + "-homeScore").innerHTML = gameStats.homeScore;
+                            awayScoreDiv.innerHTML = gameStats.awayScore;
+                            homeScoreDiv.innerHTML = gameStats.homeScore;
+
+                            // NOTE: The fade in and fade out was causing some unexpected behavior when the wrong scores would be entered into the game
+
                             // $("#" + gameId + "-awayScore").fadeOut(1000,function(){
                             //     $(this).html(gameStats.awayScore).fadeIn(2000);  
                             // });
@@ -604,7 +611,7 @@ function startInterval(date, season){
               
               
         
-    }, 120000);
+    }, 30000);
 }
 
 /**
@@ -740,16 +747,11 @@ function populateAllGames(data){
  */
 function setHeaderNextDate(date){
     var currentDate = moment(date);
-    console.log("Printing out the month " +  currentDate.date());
     currentDate.add(1, "day");
-    console.log("The Updated date is: " + currentDate.date());
     
     var year = currentDate.get("year");
     var month = parseInt(currentDate.get("month")) + 1;
     var day = currentDate.get("date");
-    console.log("the values of year is: " + year);
-    console.log("the value of month is: " + month);
-    console.log("the value of day is: " + day);
     
     // check to see if the month or the date only has a length of 1
     console.log(typeof month);
@@ -761,7 +763,6 @@ function setHeaderNextDate(date){
     }
     
     var tomorrowDate = year + "" + month + "" + day;
-    console.log(tomorrowDate);
     
     var tomorrowButton = document.getElementById("nextDayButton");
     // tomorrowButton.innerHTML = tomorrowDate;

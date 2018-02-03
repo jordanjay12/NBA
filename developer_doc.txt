@@ -9,22 +9,37 @@ alternatively: <script src="../scripts/<file.js>"</script> - ALSO WORKS
 If I was trying to do this with just plain HTML and no backend then it would have to be <script src="../scripts/standings.js"></script>
 because all of my actual EJS files are in my views folder.
 
+The running application can be found at whatever port number your application is configured to.
+    ex. localhost:3000
+
+NPM dependencies:
+1. express
+2. body-parser
+3. method-override
+4. request
+5. btoa
+6. moment
+7. moment-timezone
+8. serve-favicon
+9. ejs
+
+
 Environment Variables:
     Environment variables need to be set for the username and password to the "mysportsfeed" API
     ex. 
         Set Environment Variables (console):
             
             Linux/Unix
-            1. export USERNAME=<username>
-            2. export PASSWORD=<password>
+            1. export NBAUSERNAME=<username>
+            2. export NBAPASSWORD=<password>
             
             Windows
-            1. set USERNAME=<username>
-            2. set PASSWORD=<password>
+            1. set NBAUSERNAME=<username>
+            2. set NBAPASSWORD=<password>
             
         Retrieve Environment Variables (node.js):
-            1. process.env.USERNAME
-            2. process.env.PASSWORD
+            1. process.env.NBAUSERNAME
+            2. process.env.NBAPASSWORD
         
 Things that still need to be completed/fixed:
 
