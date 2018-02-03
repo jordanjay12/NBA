@@ -62,7 +62,7 @@ Things that still need to be completed/fixed:
     Change the background color of the row on hover as well to make it more obvious which row the user is hovering over
     Still need to figure out if I can hide the table while it is loading, and then have it appear after
     There are some font awesome loading icons that I could display, but I would need to have it overlap over top of the table
-    
+10. Since we have so many dynamic pages now, it is probably best that I didn't use the same header and footer ejs files for all the views anymore, instead change it so that each page can specify their own header, and thus its own title
     
 MAJOR BUG:
 1. When games are first starting there is still an instance that isn't being caught and games are displaying NaN for quarter and time remaining

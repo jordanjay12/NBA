@@ -891,7 +891,7 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                 var homeQuarterTotal = document.getElementById("homeQuarterTotal").innerHTML;
                 
                 // TODO: Testing will need to be performed on this to see if it is working as intended.
-                // Maybe just have it automatically set here
+                // Maybe just have it automatically set here 
                 var currentAwayScore = parseInt(awayQuarterTotal) >= currentGame.awayScore ? parseInt(awayQuarterTotal) : currentGame.awayScore;
                 var currentHomeScore = parseInt(homeQuarterTotal) >= currentGame.homeScore ? parseInt(homeQuarterTotal) : currentGame.homeScore;
                 
