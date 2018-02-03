@@ -157,7 +157,7 @@ function getScoreboard(date, season){
                 awayImage.style.width = "100px";
                 awayImage.style.margin = "auto";
                 awayImage.style.display = "inline-block";
-                awayImage.style.marginTop = "-50px";
+                awayImage.style.marginTop = "-30px";
                 awayImage.style.marginRight = "10px";
                 
                 awayDiv.appendChild(awayImage);
@@ -208,7 +208,7 @@ function getScoreboard(date, season){
                 homeImage.style.margin = "auto";
                 homeImage.style.display = "inline-block";
                 // homeImage.style.float = "right";
-                homeImage.style.marginTop = "-50px";
+                homeImage.style.marginTop = "-30px";
                 homeImage.style.marginLeft = "10px";
                 
                 homeDiv.appendChild(homeImage);
@@ -556,7 +556,8 @@ function startInterval(date, season){
 
 
                     if(gameStats.isCompleted == "true" && !gameStatus.innerHTML.includes("Completed")){
-                        // the game is completed, but still needs to be updated
+                        // the game is completed, but still needs to be updated - for some reason this still isn't catching
+                        // TODO: More testing will need to be performed to catch this, since it is currently not catching
 
                         var gameStatus = document.getElementById(gameId + "-div");
                         gameStatus.innerHTML = updateTimeRemaining(gameStats);
