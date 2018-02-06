@@ -15,7 +15,6 @@ liveButton.addEventListener("click", function(){
         this.textContent = "Today's Schedule"; // this might not necessarily be today's schedule that we are viewing
         
         buttons = $(".displayScore");
-        console.log(buttons);
         for(var i = 0; i < buttons.length; i++){
             buttons[i].click();
         }
@@ -40,7 +39,6 @@ liveButton.addEventListener("click", function(){
     }
 });
 
-//TODO: I could also have an interval timer that runs ~30 seconds and calls for new data for the live boxscore
 
 var data;
 
@@ -64,11 +62,14 @@ function Game(id, homeTeam, awayTeam, startTime,  homeScore, awayScore, isComple
 var allGames = [];
 // then to create a new game: var x = new game() with the proper parameters
 
-
+/**
+* Initial values of the scoreboard when the page is first loaded and a person clicks to view the score of one of the games
+* 
+*/
 function getScoreboard(date, season){
     
     //TODO: if this is a playoff game then I need to change the call of it
-    console.log("https://api.mysportsfeeds.com/v1.1/pull/nba/" + season + "/scoreboard.json?fordate=" + date);
+    // console.log("https://api.mysportsfeeds.com/v1.1/pull/nba/" + season + "/scoreboard.json?fordate=" + date);
     
     $.ajax
     ({
@@ -110,7 +111,6 @@ function getScoreboard(date, season){
             var newGame = new Game(id, homeTeam, awayTeam, startTime, homeScore, awayScore, isCompleted, isInProgress, currentQuarter, timeRemaining, currentIntermission);
             allGames.push(newGame);
         }
-        console.log(allGames);
         
         var buttons = document.getElementsByClassName("displayScore");
         for(var j = 0; j < buttons.length; j++){
@@ -218,7 +218,6 @@ function getScoreboard(date, season){
                 var h3;
                 var startTime;
                 var div;
-                console.log(gameStats)
                 
                 if(gameStats.isCompleted == "true" || gameStats.currentIntermission == 4){
                     // the game is over
@@ -298,13 +297,7 @@ function getScoreboard(date, season){
                     div.appendChild(h3);
                     middleDiv.appendChild(div);
                 }else if(gameStats.isInProgress == "true" && gameStats.quarterSummary != "undefined"){
-                    // I don't think there is a gameStats.quarterSummary field... - which is probably why this isn't working
-                    console.log("The current game is in progress");
-                    console.log(typeof gameStats.quarterSummary);
-                    // the game is in progress
-                    // if(gameStats.quarterSummary == "null"){
-                    //     console.log("gameStats.quarterSummary is null");
-                    // }
+
                     h3 = document.createElement("h3");
                     
                     // check to see whether or not gameStats.timeRemaining exists or not, if it doesn't exist then it is likely the game is just starting
@@ -334,9 +327,7 @@ function getScoreboard(date, season){
                         div.id = gameStats.id + "-div";
                         
                         var minutesRemaining = Math.floor(parseInt(gameStats.timeRemaining) / 60);
-                        console.log("minutes Remaining is : " + minutesRemaining);
                         var secondsRemaining = parseInt(gameStats.timeRemaining) % 60;
-                        console.log("seconds remaining is: " + secondsRemaining);
                         text = document.createTextNode("Quarter: " + gameStats.currentQuarter);
                         h3.id = gameStats.id + "-status";
                         h3.appendChild(text);
@@ -438,8 +429,6 @@ function getScoreboard(date, season){
                 
             })
         }
-        
-        // now I need to add a click listener to the liveButton
       }
     });
 }
@@ -470,7 +459,6 @@ function getTeamRecords(season){
                 for(var j = 0; j < teams.length; j++){
                     var foundTeam = teams[j];
                     if(foundTeam.team.ID == currentId){
-                        console.log("Found matching Ids: " + foundTeam.team.ID);
                         var wins = foundTeam.stats.Wins["#text"];
                         var losses = foundTeam.stats.Losses["#text"];
                         
@@ -504,9 +492,7 @@ function startInterval(date, season){
     intervalTimer = setInterval(function(){
 
         
-        
-        //TODO: Instead what I think I should be doing is clearing the "allGames" list and re-entering new data.
-        // The click events I believe are still trying to retrieve from that list 
+        // Clear the allGames list - this will be re-populated once the below AJax call is successful
         allGames = [];
         
         $.ajax
@@ -525,7 +511,6 @@ function startInterval(date, season){
                 // only get the games that are currently displaying their scores
                 // I should probably include something about last updated...
                 var buttons = document.getElementsByClassName("removeScore");
-                console.log("Printing out all the games that are currently displaying their scores");
                 
                 for(var i = 0; i < buttons.length; i++){
                     var currentButton = buttons[i];
@@ -535,13 +520,9 @@ function startInterval(date, season){
                     // find the corresponding game's data
                     // what happens if the game hasn't started yet, I need to be able to find this - that is probably why it is still using the most recent game that has started
                     
-                    console.log("Printing out all the games");
                     for(var j = 0; j < allGames.length; j++){
-                        console.log("Looking for: " + gameId);
                         if(allGames[j].id == gameId){
-                            console.log("Found the game " + gameId);
                             gameStats = allGames[j];
-                            console.log(gameStats);
                             break;
                         }
                     }
@@ -553,34 +534,41 @@ function startInterval(date, season){
                     // check to see if the game status div has "Completed" or not
                     var gameStatus = document.getElementById(gameId + "-status");
 
-
-
-                    if(gameStats.isCompleted == "true" && !gameStatus.innerHTML.includes("Completed")){
-                        // the game is completed, but still needs to be updated - for some reason this still isn't catching
-                        // TODO: More testing will need to be performed to catch this, since it is currently not catching
-
+                    // just write a bunch of different functions, and hopefully one of them will catch
+                    if(gameStats.isCompleted == "true" && gameStats.currentIntermission == "4"){
+                        // NOTE: This case didn't actually catch at the end of the game
                         var gameStatus = document.getElementById(gameId + "-div");
                         gameStatus.innerHTML = updateTimeRemaining(gameStats);
 
                         tempAwayScore.innerHTML = gameStats.awayScore;
                         tempHomeScore.innerHTML = gameStats.homeScore;
+                    }else if(gameStats.isCompleted == "true" && !gameStatus.innerHTML.toLowerCase().includes("completed")){
+                        // the game is completed, but still needs to be updated - for some reason this still isn't catching
+                        // TODO: More testing will need to be performed to catch this, since it is currently not catching
+                        var gameStatus = document.getElementById(gameId + "-div");
+                        gameStatus.innerHTML = updateTimeRemaining(gameStats);
+
+                        tempAwayScore.innerHTML = gameStats.awayScore;
+                        tempHomeScore.innerHTML = gameStats.homeScore;
+                    }else if(gameStats.isCompleted == "true" || tempAwayScore.innerHTML != gameStats.awayScore || tempHomeScore.innerHTML != gameStats.homeScore){
+                        // NOTE: THIS IS THE CASE THAT ACTUALLY CAUGHT THE END OF THE GAME
+                        var gameStatus = document.getElementById(gameId + "-div");
+                        gameStatus.innerHTML = updateTimeRemaining(gameStats);
+
+                        tempAwayScore.innerHTML = gameStats.awayScore;
+                        tempHomeScore.innerHTML = gameStats.homeScore;
+
                     }else if(gameStats.isInProgress == "true" || typeof gameStats.timeRemaining != "undefined"){
                         // then the game is in progress -- only update the game if the game is in progress
-                        console.log("The game is in progress");
                         var awayScoreDiv = document.getElementById(gameId + "-awayScore");
                         var homeScoreDiv = document.getElementById(gameId + "-homeScore");
-                        console.log("Printing out the div id: " + gameId+"-div");
                         var gameStatus = document.getElementById(gameId + "-div");
-                        console.log(gameStatus);
                         
                         var oldAwayScore = awayScoreDiv.innerHTML;
                         var oldHomeScore = homeScoreDiv.innerHTML;
                         
                         if(oldAwayScore != gameStats.awayScore || oldHomeScore != gameStats.homeScore){
                             gameStatus.innerHTML = updateTimeRemaining(gameStats);
-                            console.log("should be updating the game with the following scores");
-                            console.log(gameStats.awayScore);
-                            console.log(gameStats.homeScore);
                             awayScoreDiv.innerHTML = gameStats.awayScore;
                             homeScoreDiv.innerHTML = gameStats.homeScore;
 
@@ -594,13 +582,13 @@ function startInterval(date, season){
                             //     $(this).html(gameStats.homeScore).fadeIn(2000);  
                             // });
                         }else{
-                            console.log("There is nothing to change for: " + gameId);
+                            // console.log("There is nothing to change for: " + gameId);
                         }
                         
                         //TODO: Check to see if the game is complete, if the game is complete then I will need to update everything
                         
                     }else{
-                        console.log("The game is not in progress - nothing to change");
+                        // console.log("The game is not in progress - nothing to change");
                     }
 
 
@@ -612,7 +600,7 @@ function startInterval(date, season){
               
               
         
-    }, 30000);
+    }, 60000);
 }
 
 /**
@@ -621,7 +609,6 @@ function startInterval(date, season){
  * Returns an innerHTML string that will be placed in the element
  */
 function updateTimeRemaining(gameStats){
-    console.log("Update Time Remaining has been called");
     var gameId = '<h3 id="' + gameStats.id + '-status" class="gameStatusx">';
     var gameTime = '<h3 id="' + gameStats.id + '-time" class="gameTime">';
     var string = "";
@@ -703,7 +690,6 @@ function updateTimeRemaining(gameStats){
  * Parameter: data - the Json object that was returned from the Ajax call
  */
 function populateAllGames(data){
-    // console.log(games);
     var games = data.scoreboard.gameScore;
     for(var i = 0; i < games.length; i++){
         
@@ -755,7 +741,6 @@ function setHeaderNextDate(date){
     var day = currentDate.get("date");
     
     // check to see if the month or the date only has a length of 1
-    console.log(typeof month);
     if(month.toString().length == 1){
         month = "0" + month;
     }
@@ -823,7 +808,7 @@ function setHeaderPrevDate(date){
 /**
  * Times returned in the Ajax call are Eastern Standard Time - convert to Pacific Standard Time
  * 
- * TODO: Eventually convert the time according to the user's timezone
+ * TODO: Eventually convert the time according to the user's timezone - currently this is just displaying Western Standard Time
  * 
  */
 function adjustStartTime(startTime){
@@ -857,7 +842,10 @@ function setJumbotronButtons(date){
     setJumbotronPrevButton(date);
     setJumbotronNextButton(date);
 }
-
+/*
+* Set the href for the anchor tag found within the left button of the jumbotron
+* Styling is also set here for hover effects.
+*/
 function setJumbotronPrevButton(date){
     var currentDate = moment(date);
     currentDate.subtract(1, "day");
@@ -891,6 +879,11 @@ function setJumbotronPrevButton(date){
     });
 }
 
+/**
+* Set the href of the anchor tag found within the right button of the jumbotron
+* Styling is also set here for hover effects
+*
+*/
 function setJumbotronNextButton(date){
     var currentDate = moment(date);
     currentDate.add(1, "day");

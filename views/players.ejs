@@ -2,7 +2,7 @@
 
 <% var players = data.activeplayers.playerentry%>
 <% var currentLetter = null%>
-<h1>Welcome to the list of players page</h1>
+<h1>List of Players</h1>
 <h2 style="text-align: center">Search by Player Last Name</h2>
 <h2 id="alphabet" style="text-align: center"></h2>
 <script>
@@ -81,7 +81,6 @@ function myFunction(){
     li = ul.getElementsByTagName('li');
     
     if(filter.length == 0){
-        console.log("The filter length is zero");
         var letters = document.getElementsByClassName("letter");
         for(var i = 0; i < letters.length; i++){
             letters[i].style.display = "";
@@ -101,9 +100,7 @@ function myFunction(){
             li[i].style.display = "none";
         }
     }
-        
-    // }
-    
+
 }
 
 </script>

@@ -12,9 +12,6 @@ var favicon = require('serve-favicon');
 var username = process.env.NBAUSERNAME;
 var password = process.env.NBAPASSWORD;
 
-console.log(username);
-console.log(password);
-
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -267,7 +264,7 @@ app.get("/schedule", function(req,res){
                 expandedDate: expandedDate
             };
             
-            res.render("home", {data: data, misc: misc});
+            res.render("home", {data: data, misc: misc, today: requestDate});
         }else{
             // The daily game schedule is not defined - try for a playoff game
             var pathName = '/api/feed/pull/nba/' + year + '-playoff/daily_game_schedule.json?fordate=' + requestDate;
@@ -359,7 +356,8 @@ app.get("/schedule/:id", function(req, res){
                 today: requestDate,
                 expandedDate: expandedDate
             };
-            res.render("home", {data: data, misc: misc});
+
+            res.render("home", {data: data, misc: misc, today: requestDate});
             
         }else{
             // The daily game schedule is not defined - try for a playoff game
@@ -696,13 +694,16 @@ function fetchData(req, res, ejsFile, pathName, option, option2){
             // console.log("Nothing was returned after searching for a playoff game");
             // this is catching for all playoff games
             if(option != "undefined" && option != undefined && option != null && option == "game"){
-                // Going to a specific game - but there is no information to display for it yet
-                // console.log("Printing out the pathName");
-                // I need to parse everything between / #5 and / #6
-                // console.log(pathName);
+                // Going to a specific game - but there is no information to display for it yet          
                 res.render(ejsFile, {gameString: option2});
+
             }else{
-                res.render(ejsFile, {option: option});
+                if(option == "today"){
+                    var responseDate = getExpandedDate(option2);
+                    res.render(ejsFile, {option: option, today: responseDate});
+                }else{
+                    res.render(ejsFile, {option: option});
+                }
             }
         }else{
             var data = JSON.parse(body);
@@ -711,7 +712,8 @@ function fetchData(req, res, ejsFile, pathName, option, option2){
                 //      I can control this depending on what the value of "option" is...
                 // this should be rendering playoff information
                 var playoffGame = true;
-                res.render(ejsFile, {data: data, today: option2, playoff: playoffGame});
+                var responseDate = getExpandedDate(option2);
+                res.render(ejsFile, {data: data, today: responseDate, playoff: playoffGame});
                 return data;
             }else if(option != undefined && option != null && option == "season"){
                 // Return option2, which will be the name of the season
@@ -725,9 +727,6 @@ function fetchData(req, res, ejsFile, pathName, option, option2){
     
     });
 }
-
-console.log(process.env.PORT);
-console.log(process.env.IP);
 
 app.listen(process.env.PORT, function(){
    console.log("NBA server has started");

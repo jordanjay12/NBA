@@ -65,7 +65,6 @@ function getGameProgress(date, awayTeamName, homeTeamName, awayTeamCity, homeTea
                 currentGame = tempGame;
             }
         }
-        console.log(currentGame);
         var isCompleted = currentGame.isCompleted;
         var isInProgress = currentGame.isInProgress;
         var currentIntermission = currentGame.currentIntermission;
@@ -73,7 +72,6 @@ function getGameProgress(date, awayTeamName, homeTeamName, awayTeamCity, homeTea
         var gameProgress = document.getElementById("gameProgress");
         if(isCompleted != "false"){
             // The game is over
-            console.log("The game is completed");
             gameProgress.innerHTML = "Final";
         }else if(currentIntermission == 1){
             // in between first and second quarter
@@ -86,17 +84,14 @@ function getGameProgress(date, awayTeamName, homeTeamName, awayTeamCity, homeTea
             gameProgress.innerHTML = "Quarter: 4 - 12:00";
         }else if(currentIntermission == 4){
             // The game has been completed, but that returned data still has isCompleted as "false"
-            console.log("the game has currentIntermission set to 4");
             gameProgress.innerHTML = "Finished";
         }else if(isInProgress){
             // The game is still in progress
-            console.log("The current game is still in progress");
             
             var currentQuarter = currentGame.currentQuarter;
             var timeRemaining = currentGame.currentQuarterSecondsRemaining;
             
             var minutesRemaining = Math.floor(parseInt(timeRemaining) / 60);
-            console.log("The value of timeRemaining is " + parseInt(timeRemaining) % 60);
             var secondsRemaining = parseInt(timeRemaining) % 60;
             
             if(secondsRemaining.toString().length <= 1){
@@ -127,7 +122,6 @@ function getGameProgress(date, awayTeamName, homeTeamName, awayTeamCity, homeTea
  * 
  */
 function startInterval(date, currentSeason, awayTeamName, homeTeamName, awayTeamCity, homeTeamCity){
-    console.log("startInterval was called");
     var lastUpdated;
     boxScoreTimer = setInterval(function(){
     
@@ -151,7 +145,6 @@ function startInterval(date, currentSeason, awayTeamName, homeTeamName, awayTeam
         if(lastUpdated == undefined || lastUpdated == null || lastUpdated != data.gameboxscore.lastUpdatedOn){
             
             lastUpdated = data.gameboxscore.lastUpdatedOn;
-            console.log("The value of lastUpdated is: " + lastUpdated);
             
             var game = data.gameboxscore.game;
             
@@ -204,7 +197,6 @@ function startInterval(date, currentSeason, awayTeamName, homeTeamName, awayTeam
                 // awayRow[i+1].innerHTML = i;
                 homeRow[i+1].innerHTML = quarters[i].homeScore;
                 // homeRow[i+1].innerHTML = i;
-                console.log("For Quarter: " + (i+1) + " setting awayScore to " + quarters[i].awayScore + " and homeScore to " + quarters[i].homeScore);
             }
             
             
@@ -214,6 +206,16 @@ function startInterval(date, currentSeason, awayTeamName, homeTeamName, awayTeam
             awayRow[awayRow.length -1].innerHTML = "<strong id='awayQuarterTotal'>" + quarter.quarterTotals.awayScore + "</strong>";
             homeRow[homeRow.length -1].innerHTML = "<strong id='homeQuarterTotal'>" + quarter.quarterTotals.homeScore + "</strong>";
             
+            // Set the main Home and Away Score Totals
+            // Update the Away Score
+            $("#awayScore").fadeOut(1000,function(){
+                $(this).html(quarter.quarterTotals.awayScore).fadeIn(2000);  
+            });
+                    
+            // Update the Home Score
+            $("#homeScore").fadeOut(1000,function(){
+                $(this).html(quarter.quarterTotals.homeScore).fadeIn(2000);
+            });
             
             // When doing the Team Stats, it will probably be easier to first push the stats in an array,
             // Then go through that array and copy them over in the correct cells 1:1
@@ -265,7 +267,6 @@ function startInterval(date, currentSeason, awayTeamName, homeTeamName, awayTeam
             // I also need to include a count just in case this is a new Player that needs to be added
             homeTeam.forEach(function(player){
                 var homePlayersTable = document.getElementById("homePlayerStatsTable");
-                // console.log(player);
                 var playerFound = false;
                 for(var i=0; i < homePlayersTable.rows.length; i++){
                     var currentRow = homePlayersTable.rows[i];
@@ -342,7 +343,6 @@ function getGameInfo(gameId, regularSeason){
             url: fetchSeason + "/game_startinglineup.json?gameid=" + gameId
         },
         success: function (result){
-            console.log(result);
             var game = result.gamestartinglineup.game;
             var date = game.date;
             var time = adjustStartTime(game.time);
@@ -363,24 +363,19 @@ function getGameInfo(gameId, regularSeason){
             var actualHomeStarters = lineups[1].actual;
             
             if(actualAwayStarters != null){
-            // display actual away starters
-                console.log("Actual away starters is not null");
-                console.log(actualAwayStarters);
+            //TODO: display actual away starters - however it was found the most of the time there is no actual data available from the API
+            
             }else if(expectedAwayStarters != null){
-            // display expected away starters
-                console.log("Expected away starters is not null");
-                console.log(expectedAwayStarters);
+            //TODO: display expected away starters - however it was found that most of the timethere is no actual data available from the API
             }
             
             
             if(actualHomeStarters != null){
             // display actual home starters   
-                console.log("Actual Home starters is not null");
-                console.log(actualHomeStarters);
+            // TODO: Same as above
             }else if(expectedHomeStarters != null){
             // display expected home starters
-                console.log("Expected Home Starters is no null");
-                console.log(expectedHomeStarters);
+            // TODO: Same as above
             }
             
             if(fetchSeason.includes("playoff")){
@@ -526,22 +521,22 @@ function getGameInfo(gameId, regularSeason){
             
             var homeURL = homeTeamCity.replace(/ /g, '') + "-" + homeTeamName.replace(/ /g, '');
             var awayURL = awayTeamCity.replace(/ /g, '') + "-" + awayTeamName.replace(/ /g, '');
-            console.log("the values of homeURL and awayURL are: " + homeURL + " " + awayURL);
             getTeamInfo(fetchSeason, homeURL, awayURL);
         },
         error: function(){
             // what should happen if there is an error retrieving information - try and retrieve from playoff game
             // TODO: Test the error functionality is actually working once the playoffs start
-            console.log("hit the error for this page - attempting to retrieve playoff information");
             getGameInfo(gameId, false);
         }
     });
 }
 
 
+/**
+* Return back to the list of games for this date.
+* Note: it is not necessariy the current date as users may be viewing a game on a future day
+*/
 function setBackButton(date){
-    console.log("The value of date is: " + date);
-    console.log(date.slice(0, 8));
     var backButton = document.getElementById("backButton").href = "/schedule/" + date.slice(0, 8);
 }
 
@@ -575,14 +570,13 @@ function adjustStartTime(startTime){
  * 
  */
 function getTeamInfo(fetchSeason, homeURL, awayURL){
-    // the Ajax call is not case sensitive
-    console.log("The values of the parameters are: " + fetchSeason + " " + homeURL + " " + awayURL);
+
     
     var awayCol = document.getElementById("leftColumn");
     var midCol = document.getElementById("middleColumn");
     var homeCol = document.getElementById("rightColumn");
     
-    console.log("https://api.mysportsfeeds.com/v1.1/pull/nba/" + fetchSeason + "/overall_team_standings.json?teamstats=W,L,PTS/G,PTSA/G,AST/G,REB/G,BS/G,STL/G,TOV/G&team=" + homeURL + "," + awayURL);
+    // console.log("https://api.mysportsfeeds.com/v1.1/pull/nba/" + fetchSeason + "/overall_team_standings.json?teamstats=W,L,PTS/G,PTSA/G,AST/G,REB/G,BS/G,STL/G,TOV/G&team=" + homeURL + "," + awayURL);
     
     $.ajax({
         type: "GET",
@@ -593,7 +587,6 @@ function getTeamInfo(fetchSeason, homeURL, awayURL){
             url: fetchSeason + "/overall_team_standings.json?teamstats=W,L,PTS/G,PTSA/G,AST/G,REB/G,BS/G,STL/G,TOV/G&team=" + homeURL + "," + awayURL
         },
         success: function (data){
-            console.log(data);
             // Ajax call always returns in alphabetical order - determine entry corresponds to which team
             var awayTeam;
             var homeTeam;
@@ -687,9 +680,6 @@ function getTeamInfo(fetchSeason, homeURL, awayURL){
             createElement("h2", awayTov, awayCol);
             createElement("h2", "Turnovers Per Game", midCol);
             createElement("h2", homeTov, homeCol);
-        
-            
-            console.log(homePts);
             
         }
     });
@@ -843,14 +833,10 @@ function insertPlayer(table, count, player){
  * will also need to apply here as well.
  */
 function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
-    console.log("Retrieved the updated game status");
     var lastUpdatedGameStatus;
-    console.log("https://api.mysportsfeeds.com/v1.1/pull/nba/" + currentSeason + "/scoreboard.json?fordate=" + date);
-    
+    // console.log("https://api.mysportsfeeds.com/v1.1/pull/nba/" + currentSeason + "/scoreboard.json?fordate=" + date);
     
     gameStatusTimer = setInterval(function(){
-    
-    // TODO: This function will have to be completed to include the updated game status - time remaining / finished etc.
     
     $.ajax({
       type: "GET",
@@ -865,7 +851,6 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
         
         if(lastUpdatedGameStatus == null || lastUpdatedGameStatus == undefined || data.scoreboard.lastUpdatedOn != lastUpdatedGameStatus){
             lastUpdatedGameStatus = data.scoreboard.lastUpdatedOn;
-            console.log("The updated game status is: " + lastUpdatedGameStatus);
             // TODO: Need to check for failure - in that case we need to retieve info for a playoff game instead.
             var games = data.scoreboard.gameScore;
             var currentGame;
@@ -875,7 +860,7 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                     currentGame = tempGame;
                 }
             }
-            console.log(currentGame);
+
             var isCompleted = currentGame.isCompleted;
             var isInProgress = currentGame.isInProgress;
             var currentIntermission = currentGame.currentIntermission;
@@ -884,7 +869,6 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
             var gameProgress = document.getElementById("gameProgress");
             if(isCompleted != "false"){
                 // The game is over
-                console.log("The game is completed");
                 gameProgress.innerHTML = "Finished";
 
                 var awayQuarterTotal = document.getElementById("awayQuarterTotal").innerHTML;
@@ -892,8 +876,8 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                 
                 // TODO: Testing will need to be performed on this to see if it is working as intended.
                 // Maybe just have it automatically set here 
-                var currentAwayScore = parseInt(awayQuarterTotal) >= currentGame.awayScore ? parseInt(awayQuarterTotal) : currentGame.awayScore;
-                var currentHomeScore = parseInt(homeQuarterTotal) >= currentGame.homeScore ? parseInt(homeQuarterTotal) : currentGame.homeScore;
+                var currentAwayScore = parseInt(awayQuarterTotal) >= parseInt(currentGame.awayScore) ? parseInt(awayQuarterTotal) : currentGame.awayScore;
+                var currentHomeScore = parseInt(homeQuarterTotal) >= parseInt(currentGame.homeScore) ? parseInt(homeQuarterTotal) : currentGame.homeScore;
                 
                 // Update the Away Score
                 $("#awayScore").fadeOut(1000,function(){
@@ -908,7 +892,6 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                 // Stop both of the ongoing interval timers
                 clearInterval(boxScoreTimer);
                 clearInterval(gameStatusTimer);
-                console.log("both interval timers have been cleared, nothing else beyond this should be printed");
             }else if(quarterSummary == "null" || quarterSummary == undefined || quarterSummary == null || quarterSummary == "undefined"){
                 gameProgress.innerHTML= "Starting";   
             }
@@ -923,11 +906,28 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                 gameProgress.innerHTML = '<span style="color: green">Q4</span> <span style="color:red">12:00</span>';
             }else if(currentIntermission == 4){
                 // The game has been completed, but that returned data still has isCompleted as "false"
-                console.log("the game has currentIntermission set to 4");
                 gameProgress.innerHTML = "Finished";
+
+                // just in case we need to catch the end of the game here as well.
+                var awayQuarterTotal = document.getElementById("awayQuarterTotal").innerHTML;
+                var homeQuarterTotal = document.getElementById("homeQuarterTotal").innerHTML;
+                
+                // TODO: Testing will need to be performed on this to see if it is working as intended.
+                // Maybe just have it automatically set here 
+                var currentAwayScore = parseInt(awayQuarterTotal) >= parseInt(currentGame.awayScore) ? parseInt(awayQuarterTotal) : currentGame.awayScore;
+                var currentHomeScore = parseInt(homeQuarterTotal) >= parseInt(currentGame.homeScore) ? parseInt(homeQuarterTotal) : currentGame.homeScore;
+                
+                // Update the Away Score
+                $("#awayScore").fadeOut(1000,function(){
+                    $(this).html(currentAwayScore).fadeIn(2000);  
+                });
+                        
+                // Update the Home Score
+                $("#homeScore").fadeOut(1000,function(){
+                    $(this).html(currentHomeScore).fadeIn(2000);
+                });
             }else if(isInProgress){
                 // The game is still in progress
-                console.log("The current game is still in progress");
                 
                 // Here I also need to set the score of the game as well
                 
@@ -942,7 +942,7 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                 var secondsRemaining = parseInt(timeRemaining) % 60;
                 
                 if(String(secondsRemaining).length ==1){
-                    secondsRemaining = String(secondsRemaining) + "0";
+                    secondsRemaining = "0" + String(secondsRemaining);
                 }
                 
                 // Update the Game Progress - this should be two spans, one for the quarter, the other for the time remaining the quarter
@@ -974,15 +974,11 @@ function getUpdatedGameStatus(date, currentSeason, awayTeamName, homeTeamName){
                 
                 // gameProgress.innerHTML = "Quarter: " + currentQuarter + " - " + minutesRemaining + ":" + secondsRemaining;
             }
-        }else{
-            console.log("there were no changes in the game log");
-            console.log("The value of updated game status is STILL: " + lastUpdatedGameStatus);
         }
-        
       }
     });
     
-    }, 120000); //End of start interval
+    }, 60000); //End of start interval
     
 }
 

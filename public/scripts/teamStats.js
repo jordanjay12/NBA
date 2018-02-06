@@ -12,7 +12,6 @@ function getTeamStats(teamName){
     var date = new Date();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();
-    console.log("the value of year is " + year);
     var currentSeason;
     if(parseInt(month) >= 9){
         var nextYear = parseInt(year) + 1;
@@ -21,7 +20,6 @@ function getTeamStats(teamName){
         var prevYear = parseInt(year) - 1;
         currentSeason = prevYear + "-" + year + "-regular";
     }
-    console.log("the value of currentSeason is " + currentSeason);
     
     var currentTeam;
 

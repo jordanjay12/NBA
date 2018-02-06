@@ -131,8 +131,6 @@ var date = new Date();
 var month = date.getMonth() + 1;
 var year = date.getFullYear();
 
-console.log("The month is: " + month + " and the year is: " + year);
-
 var currentSeason;
 
 if(parseInt(month) >= 9){
@@ -175,7 +173,6 @@ conferenceButton.addEventListener("click", function(){
         
         //TODO: need to do a check to see if we have already displayed the table before - simply check if the table has any child elements
         //TODO: otherwise we will just be appending the same thing on to it...
-        console.log(document.getElementById("conferenceStandings"));
           
           //TODO: add a for loop that goes through the number of conferences, and then for each it does this
           for(var index = 0; index < data.conferenceteamstandings.conference.length; index++){
