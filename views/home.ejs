@@ -120,14 +120,9 @@
             var regular = prevYear + "-" + year + "-regular";
 
             var playoff = year + "-playoff";
-            console.log("The value of playoff is: " + playoff);
 
             // Retrieve the Playoff scoreboard
             getScoreboard(currentDate, playoff);
-            //TODO: This currently isn't working for retrieving the team records
-            // there isn't anything in the API so I probably just want to use the regular season team records
-
-
             getTeamRecords(regular);
             startInterval(currentDate, playoff);
         <% }else{ %>

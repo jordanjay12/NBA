@@ -438,7 +438,6 @@ function getScoreboard(date, season){
  *
  */
 function getTeamRecords(season){
-    console.log("Trying to retrieve team records for: " + season + "/overall_team_standings.json?teamstats=W,L");
     $.ajax({
         type: "GET",
         url: "/ajax",
@@ -448,8 +447,6 @@ function getTeamRecords(season){
             url: season + "/overall_team_standings.json?teamstats=W,L"
         },
         success: function (result){
-
-            console.log(result);
             var teamRecords = document.getElementsByClassName("teamRecords");
 
             var teams = result.overallteamstandings.teamstandingsentry;

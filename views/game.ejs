@@ -12,18 +12,18 @@
 <% var quarters = data.gameboxscore.quarterSummary.quarter %>
 <% var date = game.date %>
 
-    
+
 <div class = "container">
         <div class="jumbotron">
-            
-            
+
+
             <div class="row row-eq-height" style="display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex;">
                 <div class = "col-lg-5" style="text-align: center; font-size: 4vw; white-space: nowrap">
                     <h3 style="color: #0099cc; margin-top: 0px;">Away</h3>
                     <% var awayTeamImage = (game.awayTeam.City + game.awayTeam.Name).replace(/ /g, '') %>
                     <% var awayTeamCity = game.awayTeam.City.replace(" ", ""); %>
                     <% var awayTeamName = game.awayTeam.Name.replace(" ", ""); %>
-                    
+
                     <a href="/teamStats/<%=awayTeamCity%>-<%=awayTeamName%>">
                         <img src="../images/<%=awayTeamImage%>.png" style="height: 200px; width: 200px; display: block; margin: 0 auto"> </img>
                     </a>
@@ -60,9 +60,9 @@
                         <a href="/teamStats/<%=homeTeamCity%>-<%=homeTeamName%>"style="cursor: pointer; color: black; text-decoration: none;"><%=game.homeTeam.City%> <%=game.homeTeam.Name%></a>
                     </h1>
                 </div>
-                
+
             </div>
-        </div>    
+        </div>
 
     <div class="row" id="quarterTotals" style="text-align: center">
         <table id="quarterSummaryTable" align="center" style="padding-bottom: 10px; margin-bottom: 20px; border: 0">
@@ -132,7 +132,7 @@
                         <td><%=awayTeamStats.FtMade['#text']%>/<%=awayTeamStats.FtAtt['#text']%></td>
                     </tr>
                 </table>
-            </div>    
+            </div>
             <h1>Player Stats</h1>
             <!--<table style="width:100%; border: 0;" class="player-stats table table-striped table-bordered">-->
             <table style="width: 100%; border: 0" id="awayPlayerStatsTable">
@@ -150,12 +150,12 @@
                 </tr>
                     <%awayTeam.forEach(function(player){ %>
                         <tr id="<%=player.player.ID%>">
-                            <% 
+                            <%
                             // cannot have any decimal places that occur in the name of the player
                             // still need to figure out hyphens in other players
                             var firstName = player.player.FirstName;
                             var lastName = player.player.LastName;
-                             
+
                             while(firstName.includes(".") || firstName.includes("-")){
                                 firstName = firstName.replace(".", "");
                                 firstName = firstName.replace("-", "");
@@ -163,8 +163,8 @@
                             while(lastName.includes(".") || lastName.includes("-")){
                                 lastName = lastName.replace(".", "");
                                 lastName = lastName.replace("-", "");
-                            }                            
-                            %>                            
+                            }
+                            %>
                             <td><a href="/playerStats/<%=firstName%>-<%=lastName%>"><%=player.player.FirstName%> <%=player.player.LastName%></a></td>
                             <td><%=player.stats.Pts['#text']%> </td>
                             <td><%=player.stats.Reb['#text']%></td>
@@ -174,14 +174,14 @@
                             <td><%=player.stats.Tov['#text']%></td>
                             <td><%=player.stats.Fouls['#text']%></td>
                             <td><%=player.stats.PlusMinus['#text']%></td>
-                            
+
                             <td><%= Math.floor(player.stats.MinSeconds['#text']/60)%></td>
                         </tr>
                         <!--<li class = "players"> <%= player.player.FirstName%> <%=player.player.LastName%> Points = <%=player.stats.Pts['#text']%> Rebounds = <%=player.stats.Reb['#text']%> Assists = <%=player.stats.Ast['#text']%></li>-->
                     <% }) %>
             </table>
         </div>
-        
+
         <div class ="col-md-6"> <!-- HOME PLAYER COLUMN-->
             <div class="HomeTeamStats">
                 <h1>Team Stats</h1>
@@ -229,7 +229,7 @@
                     </tr>
                     <%homeTeam.forEach(function(player){ %>
                         <tr id="<%=player.player.ID%>">
-                            <% 
+                            <%
                             var firstName = player.player.FirstName;
                             var lastName = player.player.LastName;
                             while(firstName.includes(".") || firstName.includes("-") || firstName.includes(" ")){
@@ -241,9 +241,9 @@
                                 lastName = lastName.replace(".", "");
                                 lastName = lastName.replace("-", "");
                                 lastName = lastName.replace(" ", "");
-                            }                            
+                            }
                             %>
-                            
+
                             <td><a href="/playerStats/<%=firstName%>-<%=lastName%>"><%=player.player.FirstName%> <%=player.player.LastName%></a></td>
                             <td><%=player.stats.Pts['#text']%></td>
                             <td><%=player.stats.Reb['#text']%></td>
@@ -253,24 +253,29 @@
                             <td><%=player.stats.Tov['#text']%></td>
                             <td><%=player.stats.Fouls['#text']%></td>
                             <td><%=player.stats.PlusMinus['#text']%></td>
-                            <td><%=Math.floor(player.stats.MinSeconds['#text']/60)%></td>                        
+                            <td><%=Math.floor(player.stats.MinSeconds['#text']/60)%></td>
                         </tr>
                         <!--<li class = "players"> <%= player.player.FirstName%> <%=player.player.LastName%> Points = <%=player.stats.Pts['#text']%> Rebounds = <%=player.stats.Reb['#text']%> Assists = <%=player.stats.Ast['#text']%></li>-->
-                    <% }) %>                    
+                    <% }) %>
                 </div>
             </div>
-                
+
             </table>
         </div>
-        
-        
+
+
     </div>
 
 </div>
 
 <script>
     // Set the current status of the game - start interval if necessary
-    getGameProgress('<%=date%>', '<%=game.awayTeam.Name%>', '<%=game.homeTeam.Name%>', '<%=game.awayTeam.Abbreviation%>', '<%=game.homeTeam.Abbreviation%>');
+    <% if(typeof playoff == "undefined"){ %>
+      getGameProgress('<%=date%>', '<%=game.awayTeam.Name%>', '<%=game.homeTeam.Name%>', '<%=game.awayTeam.Abbreviation%>', '<%=game.homeTeam.Abbreviation%>', false);
+    <% }else{ %>
+      getGameProgress('<%=date%>', '<%=game.awayTeam.Name%>', '<%=game.homeTeam.Name%>', '<%=game.awayTeam.Abbreviation%>', '<%=game.homeTeam.Abbreviation%>', true);
+
+    <% } %>
     addPlayerStatsHover();
 </script>
 
@@ -278,12 +283,12 @@
 <!-- There is no data to display for this game, likely it has not occurred yet-->
 
     <!--<script src="../scripts/game.js"></script>-->
-    
+
     <div class="container">
         <div class="jumbotron" id="jumbotron">
             <a href="/" id="backButton" class="btn btn-primary btn-lg" role="button" style="text-align: center">Back to the list of games</i></a>
         </div>
-        
+
         <div class="row">
             <div class="col-sm-4" id="leftColumn"></div>
             <div class="col-sm-4" id="middleColumn"></div>
@@ -296,10 +301,7 @@
         var year = gameString.slice(0,4);
         var month = gameString.slice(4,6);
         var day = gameString.slice(6,8);
-        console.log("Year: " + year + " month: " + month + " day: " + day);
-        console.log(gameString.slice(0,4));
-        
-        
+
         getGameInfo("<%=gameString%>", true);
         setBackButton(gameString);
     </script>

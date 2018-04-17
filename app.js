@@ -93,7 +93,6 @@ app.get("/", function(req, res){
             res.render("home", {data: data, misc: misc});
         }else{
             // Try to render a playoff page if it exists - always checking for regular first so playoff if failed
-            console.log("Trying to find the playoff schedule instead");
             var pathName = '/api/feed/pull/nba/' + yyyy + '-playoff/daily_game_schedule.json?fordate=' + today;
             data = fetchData(req, res, "home.ejs", pathName, "today", today);
         }
@@ -473,7 +472,6 @@ app.get("/leagueLeaders", function(req, res){
 app.get("/ajax", function(req, res){
     (function(callback) {
     'use strict';
-
     const httpTransport = require('https');
     const responseEncoding = 'utf8';
     const httpOptions = {
@@ -513,10 +511,71 @@ app.get("/ajax", function(req, res){
 
 
     })((error, statusCode, headers, body) => {
-        var data = JSON.parse(body);
-        res.json(data);
+        var test = body;
+        // console.log("The value of test is: " + test);
+        if(test == "undefined" || test == undefined || test == ""){
+          var stringURL = req.query.url;
+          var newURL = stringURL.substring(stringURL.indexOf("-") + 1).replace("regular", "playoff");
+
+          failedAjax(req, res, newURL);
+
+        }else{
+          var data = JSON.parse(body);
+          res.json(data);
+        }
     });
 })
+
+/**
+* Called when an Ajax call to this server fails (since that method is performing a get request and we still want to be able to send stuff back)
+*/
+function failedAjax(req, res, pathExtension){
+  (function(callback) {
+  'use strict';
+
+  const httpTransport = require('https');
+  const responseEncoding = 'utf8';
+  const httpOptions = {
+      hostname: 'api.mysportsfeeds.com',
+      port: '443',
+      path: "/v1.1/pull/nba/" + pathExtension,
+      method: 'GET',
+      headers: {"Authorization":"Basic " + btoa(username + ":" + password)}
+  };
+  httpOptions.headers['User-Agent'] = 'node ' + process.version;
+
+  const request = httpTransport.request(httpOptions, (res) => {
+      let responseBufs = [];
+      let responseStr = '';
+
+      res.on('data', (chunk) => {
+          if (Buffer.isBuffer(chunk)) {
+              responseBufs.push(chunk);
+          }
+          else {
+              responseStr = responseStr + chunk;
+          }
+      }).on('end', () => {
+          responseStr = responseBufs.length > 0 ?
+              Buffer.concat(responseBufs).toString(responseEncoding) : responseStr;
+
+          callback(null, res.statusCode, res.headers, responseStr);
+      });
+
+  })
+  .setTimeout(0)
+  .on('error', (error) => {
+      callback(error);
+  });
+  request.write("");
+  request.end();
+
+
+  })((error, statusCode, headers, body) => {
+        var data = JSON.parse(body);
+        res.json(data);
+  });
+}
 
 
 /**
@@ -697,17 +756,14 @@ function fetchData(req, res, ejsFile, pathName, option, option2){
             // this is catching for all playoff games
             if(option != "undefined" && option != undefined && option != null && option == "game"){
                 // Going to a specific game - but there is no information to display for it yet
-                console.log("Trying to render in 1");
                 res.render(ejsFile, {gameString: option2});
 
             }else{
                 if(option == "today"){
                     var responseDate = getExpandedDate(option2);
-                    console.log("Trying to render in 2");
                     res.render(ejsFile, {option: option, today: responseDate});
 
                 }else{
-                    console.log("Trying to render in 3");
                     res.render(ejsFile, {option: option});
                 }
             }
@@ -726,18 +782,14 @@ function fetchData(req, res, ejsFile, pathName, option, option2){
                   expandedDate: responseDate
                 }
 
-                console.log("Trying to render in 4");
                 res.render(ejsFile, {data: data, today: responseDate, playoff: playoffGame, misc: misc});
                 return data;
             }else if(option != undefined && option != null && option == "season"){
                 // Return option2, which will be the name of the season
-                console.log("Trying to render in 5");
                 res.render(ejsFile, {data: data, option: option2});
             }else if(option != undefined){
-                console.log("Trying to render in 6");
-                res.render(ejsFile, {data: data, option : option});
+                res.render(ejsFile, {data: data, option : option, playoff: true});
             }else{
-                console.log("Trying to render in 7");
                 res.render(ejsFile, {data: data});
             }
         }
