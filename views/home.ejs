@@ -12,15 +12,15 @@
             <div class="col-sm-8" style="text-align: center;">
                 <% var games = data.dailygameschedule.gameentry %>
                 <% var expandedDate = misc.expandedDate %>
-                <h1 id="titleHeader">NBA Schedule</h1>
-                <h1><%=expandedDate%></h1>
-                <!--<h1><%=games[0].date%></h1>-->
-                
-                <% if(typeof playoff != "undefined"){ %>
-                    <h1>This is a playoff game</h1>
+                <% if(typeof playoff == "undefined"){ %>
+                  <h1 id="titleHeader">NBA Schedule</h1>
+                <% }else{ %>
+                  <h1 id="titleHeader">NBA Playoffs</h1>
                 <% } %>
+                <h1><%=expandedDate%></h1>
+
                 <div class="btn btn-primary btn-lg" id="liveButton" style="text-align: center">Live Scoreboard</div>
-                
+
             </div>
             <div class="col-sm-2" style="text-align: center;">
                 <a id="jumbotronRightButton" href="#" ><button class="btn glyphicon glyphicon-circle-arrow-right" id="largeRightButton" style="width:100%; height: 300px; font-size: 400%; background: #eee"></button></a>
@@ -28,9 +28,9 @@
         </div>
 
 
-        
+
     </div>
-    
+
     <% games.forEach(function(game){ %>
         <!--<h2>-->
         <!--    <%=game.awayTeam.City%> <%= game.awayTeam.Name%> vs. <%=game.homeTeam.City%> <%=game.homeTeam.Name%> - <%=game.time%>-->
@@ -68,7 +68,7 @@
                            }
                         %>
                         <h3 style="text-align: center; margin-top: 30px"><%=startTime%></h3>
-                        <div class="btn btn-primary btn-lg displayScore" id="<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>" style="margin: 0 auto; width: 125px">Score</div>                        
+                        <div class="btn btn-primary btn-lg displayScore" id="<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>" style="margin: 0 auto; width: 125px">Score</div>
                         <br>
                         <br>
                         <a href="/game/<%=date%>-<%=game.awayTeam.Abbreviation%>-<%=game.homeTeam.Abbreviation%>" class="btn btn-primary btn-lg" role="button" style="width:125px; text-align: center; margin: 0 auto;"><i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></a>
@@ -88,10 +88,10 @@
             <div class="thumbnail" id="move-in-to-place" style="opacity:0">
             </div>
         </div>
-        
+
         </h2>
     <% }) %>
-    
+
     <script src="../scripts/home.js"></script>
     <script>
         var date = "<%=games[0].date%>";
@@ -101,30 +101,39 @@
         var day;
 
         var currentDate = year+month+day;
-        
+
         var momentDate = year + "-" + month + "-" + day;
-        
+
         setHeaderNextDate(momentDate);
         setHeaderPrevDate(momentDate);
-        
+
         setJumbotronButtons(momentDate);
-        
+
         // also need to include the season that we should be looking for
         // and we should also include some kind of flag for playoffs
         // app.js should be telling us whether or not the data that is displayed on the page is a playoff game or not
-        
+
         <% if(typeof playoff != "undefined"){ %>
             // should be rendering the game as a regular season game
+
+            var prevYear = year - 1;
+            var regular = prevYear + "-" + year + "-regular";
+
             var playoff = year + "-playoff";
-            
+            console.log("The value of playoff is: " + playoff);
+
             // Retrieve the Playoff scoreboard
             getScoreboard(currentDate, playoff);
-            getTeamRecords(playoff);
+            //TODO: This currently isn't working for retrieving the team records
+            // there isn't anything in the API so I probably just want to use the regular season team records
+
+
+            getTeamRecords(regular);
             startInterval(currentDate, playoff);
         <% }else{ %>
             // should be rendering the game as a playoff game
             var regular;
-            
+
             if(parseInt(month) >= 9){
                 // then use the <currentYear>-<nextYear>
                 var nextYear = parseInt(year) + 1;
@@ -134,14 +143,14 @@
                 var prevYear = parseInt(year)-1;
                 regular = prevYear + "-" + year + "-regular";
             }
-            
+
             // Retrieve the regular season scoreboard
             getScoreboard(currentDate, regular);
             getTeamRecords(regular);
             startInterval(currentDate, regular);
         <% } %>
-    </script>   
-    
+    </script>
+
     <% }else{%>
     <div class="jumbotron">
         <% var year = today.slice(0,4)

@@ -24,21 +24,27 @@ NPM dependencies:
 
 Environment Variables:
     Environment variables need to be set for the username and password to the "mysportsfeed" API
-    ex. 
+    ex.
         Set Environment Variables (console):
-            
+
             Linux/Unix
             1. export NBAUSERNAME=<username>
             2. export NBAPASSWORD=<password>
-            
+
             Windows
             1. set NBAUSERNAME=<username>
             2. set NBAPASSWORD=<password>
-            
+
         Retrieve Environment Variables (node.js):
             1. process.env.NBAUSERNAME
             2. process.env.NBAPASSWORD
-        
+
+
+Problems with playoffs:
+1. The progress of the game currently isn't working
+2. When the game hasn't been played yet, and we are trying to view the game on the game page it is crashing the application
+
+
 Things that still need to be completed/fixed:
 
 1. Need to change the backend so that we are looking at the date and if we have to we should be displaying information about playoff games as well.
@@ -54,7 +60,7 @@ Things that still need to be completed/fixed:
 7. Get the game Staring lineups - however often times there isn't any data that is actually being returned yet.
 8. Changes still need to be made to the League Leaders page
     include a loading icon while the table is loading - quite large becausae it contains data on all available players
-    
+
 9. League Leaders Page
     Figure out if I can ge the drop-down menu working properly and having it scroll horizontally to the proper column
     Change the background color of the row on hover as well to make it more obvious which row the user is hovering over
@@ -63,14 +69,14 @@ Things that still need to be completed/fixed:
 10. Since we have so many dynamic pages now, it is probably best that I didn't use the same header and footer ejs files for all the views anymore, instead change it so that each page can specify their own header, and thus its own title
 11. There are still a couple of problems when on the game.ejs page where the game is complete and it actually says complete, but the score isn't updated to the final score.
 12. When there are no games to display for a particular day, I just display that there is nothing to display for that day, however I should still have some buttons so that users can navigate to the previous and next day.
-    Currently the only thing there is, is what is in the header, but because I do everything in the if statement, I am going to need to 
+    Currently the only thing there is, is what is in the header, but because I do everything in the if statement, I am going to need to
     change the header as well.
-    
+
 MAJOR BUG:
 1. When games are first starting there is still an instance that isn't being caught and games are displaying NaN for quarter and time remaining
     Futhermore, trying to view more of this game will also throw an error, I guess nothing could properly be returned from the call.
 2. Some Error handling will need to be performed on the possible dates that can be added through the date selector.
-    
+
 
 
 BUGS:

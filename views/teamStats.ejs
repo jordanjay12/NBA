@@ -17,13 +17,13 @@
             <li class="list-group-item" id="RPG"><strong>Rebounds per Game:</strong></li>
             <li class="list-group-item" id="SPG"><strong>Steals per Game:</strong></li>
             <li class="list-group-item" id="BPG"><strong>Blocks per Game:</strong></li>
-            <li class="list-group-item" id="ToPG"><strong>Turnovers per Game:</strong></li>                
+            <li class="list-group-item" id="ToPG"><strong>Turnovers per Game:</strong></li>
         </div>
         <div class="col-md-4" id="middleColumn">
 
         </div>
         <div class="col-md-4" id="advancedTeamStats">
-            
+
         </div>
     </div>
 
@@ -54,14 +54,14 @@
                     lastName = lastName.replace("-", "");
                     lastName = lastName.replace(" ", "");
                 }
-                %>                
+                %>
                 <td><a href="/playerStats/<%=firstName%>-<%=lastName%>"><%=currentPlayer.FirstName%> <%=currentPlayer.LastName%></a></td>
                 <td><%=currentPlayer.JerseyNumber%></td>
                 <td><%=currentPlayer.Position%></td>
                 <td><%=currentPlayer.Height%></td>
                 <td><%=currentPlayer.Weight%></td>
                 <td><%=currentPlayer.Age%></td>
-                <td><%=currentPlayer.BirthCity%> <%=currentPlayer.BirthCountry%></td>            
+                <td><%=currentPlayer.BirthCity%> <%=currentPlayer.BirthCountry%></td>
             </tr>
         <% } %>
     </table>
@@ -69,7 +69,7 @@
     <br>
     <br>
     <div id="teamDiv">
-        
+
     </div>
 
 </div>
