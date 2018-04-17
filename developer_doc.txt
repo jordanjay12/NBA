@@ -39,6 +39,8 @@ Environment Variables:
             1. process.env.NBAUSERNAME
             2. process.env.NBAPASSWORD
 
+    Additionally, the "PORT" may need to be specified in your environment variables, ex PORT: 3000
+
 
 Problems with playoffs:
 1. The progress of the game currently isn't working
