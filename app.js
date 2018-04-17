@@ -770,11 +770,6 @@ function fetchData(req, res, ejsFile, pathName, option, option2){
         }else{
             var data = JSON.parse(body);
             if(option == "today"){
-                //TODO: Checks will need to be done here to determine what the variable name should be for option 2
-                //      I can control this depending on what the value of "option" is...
-                // this should be rendering playoff information
-
-                //TODO: I am going to need to include misc here, which is just the date and the expanded date? "Today" and "expandedDate"
                 var playoffGame = true;
                 var responseDate = getExpandedDate(option2);
                 var misc = {
