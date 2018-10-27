@@ -793,5 +793,5 @@ function fetchData(req, res, ejsFile, pathName, option, option2){
 }
 
 app.listen(process.env.PORT, function(){
-   console.log("NBA server has started");
+   console.log("NBA server has started on PORT:", process.env.PORT);
 });

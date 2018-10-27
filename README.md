@@ -38,4 +38,4 @@ Note: All NBA statistics are retrieved from the [MySportsFeed](https://www.myspo
 ## Running the Application
 
 1. Starting the Express server: `node app.js`
-2. The running application can be found at whatever port your application is configured to, likely: `localhost:3000`, unless your port has been changed in your environment variables.
+2. The running application can be found at `localhost:3000`
