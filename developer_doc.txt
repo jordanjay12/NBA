@@ -4,22 +4,8 @@ however this time the src will be to the scripts folder within the public direct
 example: <script src="scripts/standings.js"></script> - WORKS
 alternatively: <script src="../scripts/<file.js>"</script> - ALSO WORKS
 
-If I was trying to do this with just plain HTML and no backend then it would have to be <script src="../scripts/standings.js"></script>
-because all of my actual EJS files are in my views folder.
-
 The running application can be found at whatever port number your application is configured to.
     ex. localhost:3000
-
-NPM dependencies:
-1. express
-2. body-parser
-3. method-override
-4. request
-5. btoa
-6. moment
-7. moment-timezone
-8. serve-favicon
-9. ejs
 
 
 Environment Variables:
