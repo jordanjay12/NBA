@@ -18,7 +18,7 @@
     "method-override": "^2.3.10",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.15",
-    "request": "^2.85.0",
+    "request": "^2.88.0",
     "serve-favicon": "^2.5.0"
   }
 }
